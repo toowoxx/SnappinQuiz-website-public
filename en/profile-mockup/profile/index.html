@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../../">
+  <meta name="description" content="SnappinQuiz profile mockup with sign-up, login, and profile management for UI testing without a backend.">
+  <title>SnappinQuiz - Profile Settings Mockup</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <script src="src/js/tailwind-font-size-tokens.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87'},
+            accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899'},
+            cyber: {dark:'#0a0a0f',darker:'#050508',purple:'#aa96d2',pink:'#fcd3eb',green:'#00ff88',blue:'#00d4ff'}
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif']
+          },
+          fontSize: window.SNAPPINQUIZ_FONT_SIZE_TOKENS,
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #050508;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+    }
+    .light, [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light .bg-cyber-dark, [data-theme="light"] .bg-cyber-dark { background-color: #ffffff; }
+    .light .bg-cyber-darker, [data-theme="light"] .bg-cyber-darker { background-color: #f9fafb; }
+    .light .bg-white\/5, [data-theme="light"] .bg-white\/5 { background-color: rgba(0,0,0,0.03); }
+    .light .border-white\/10, [data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.1); }
+    .light .text-white, [data-theme="light"] .text-white { color: var(--text-primary); }
+    .light .text-gray-300, [data-theme="light"] .text-gray-300 { color: var(--text-secondary); }
+    .light .text-gray-400, [data-theme="light"] .text-gray-400 { color: var(--text-secondary); }
+    .light .nav-blur, [data-theme="light"] .nav-blur { background-color: rgba(255,255,255,0.9); }
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .scanline {
+      background: linear-gradient(transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .nav-link-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .profile-main-offset {
+      padding-top: calc(7rem + env(safe-area-inset-top));
+    }
+    @keyframes profilePulse {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+    .profile-pulse-dot {
+      animation: profilePulse 2s ease-in-out infinite;
+    }
+    .profile-fancy-panel {
+      border: 1px solid rgba(192, 132, 252, 0.28);
+      background:
+        linear-gradient(150deg, rgba(168, 85, 247, 0.18) 0%, rgba(10, 10, 15, 0.78) 45%, rgba(244, 114, 182, 0.16) 100%);
+      box-shadow: 0 20px 50px rgba(88, 28, 135, 0.22);
+    }
+    .profile-fancy-card {
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      background: linear-gradient(140deg, rgba(168, 85, 247, 0.14) 0%, rgba(255, 255, 255, 0.04) 52%, rgba(244, 114, 182, 0.1) 100%);
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .profile-fancy-card:hover {
+      border-color: rgba(244, 114, 182, 0.3);
+      box-shadow: 0 10px 22px rgba(88, 28, 135, 0.14);
+    }
+    .profile-fancy-heading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .profile-tab-button {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #d1d5db;
+      transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+    }
+    .profile-tab-button[aria-selected="true"] {
+      border-color: rgba(192, 132, 252, 0.45);
+      color: #e9d5ff;
+      background: rgba(168, 85, 247, 0.2);
+    }
+    .profile-tab-button[aria-selected="false"]:hover {
+      border-color: rgba(192, 132, 252, 0.34);
+      color: #f3e8ff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .profile-fancy-cta {
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.88), rgba(236, 72, 153, 0.85));
+      box-shadow: 0 12px 26px rgba(168, 85, 247, 0.28);
+    }
+    .profile-fancy-cta:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .profile-fancy-cta:active {
+      transform: translateY(0);
+      filter: brightness(1.03);
+    }
+    .light .profile-fancy-panel, [data-theme="light"] .profile-fancy-panel {
+      border-color: rgba(168, 85, 247, 0.2);
+      background: linear-gradient(150deg, rgba(168, 85, 247, 0.1) 0%, rgba(255, 255, 255, 0.96) 45%, rgba(244, 114, 182, 0.1) 100%);
+      box-shadow: 0 16px 32px rgba(168, 85, 247, 0.12);
+    }
+    .light .profile-fancy-card, [data-theme="light"] .profile-fancy-card {
+      border-color: rgba(168, 85, 247, 0.2);
+      background: linear-gradient(140deg, rgba(168, 85, 247, 0.1) 0%, rgba(255, 255, 255, 0.95) 52%, rgba(244, 114, 182, 0.08) 100%);
+      box-shadow: 0 8px 18px rgba(168, 85, 247, 0.08);
+    }
+    .light .profile-fancy-heading, [data-theme="light"] .profile-fancy-heading {
+      color: #7e22ce;
+    }
+    .light .profile-fancy-cta, [data-theme="light"] .profile-fancy-cta {
+      color: #ffffff;
+      border-color: rgba(147, 51, 234, 0.45);
+      box-shadow: 0 10px 22px rgba(168, 85, 247, 0.2);
+    }
+    .light .profile-tab-button, [data-theme="light"] .profile-tab-button {
+      border-color: rgba(147, 51, 234, 0.2);
+      color: #6b7280;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .light .profile-tab-button[aria-selected="true"], [data-theme="light"] .profile-tab-button[aria-selected="true"] {
+      border-color: rgba(126, 34, 206, 0.58);
+      color: #581c87;
+      background: rgba(168, 85, 247, 0.22);
+    }
+    .light .profile-tab-button[aria-selected="false"]:hover, [data-theme="light"] .profile-tab-button[aria-selected="false"]:hover {
+      border-color: rgba(147, 51, 234, 0.3);
+      color: #581c87;
+      background: rgba(255, 255, 255, 0.96);
+    }
+    .light .profile-level-chip, [data-theme="light"] .profile-level-chip {
+      border-color: rgba(126, 34, 206, 0.35);
+      background: rgba(168, 85, 247, 0.18);
+      color: #4c1d95;
+    }
+    .profile-tab-content {
+      position: relative;
+      border-color: rgba(192, 132, 252, 0.24);
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.07), rgba(255, 255, 255, 0.03));
+    }
+    .profile-tab-card-list {
+      --profile-tab-card-columns: 3;
+      --profile-tab-card-height: 24rem;
+      display: grid;
+      grid-template-columns: repeat(var(--profile-tab-card-columns), minmax(0, 1fr));
+      align-items: stretch;
+      align-content: start;
+      gap: 1rem;
+      overflow: visible;
+    }
+    .profile-tab-card-list > li {
+      min-width: 0;
+      display: flex;
+    }
+    .profile-tab-card-list > li.profile-tab-empty-item {
+      grid-column: 1 / -1;
+      border: 1px solid rgba(192, 132, 252, 0.26);
+      border-radius: 0.9rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 1rem;
+      color: #d1d5db;
+    }
+    .profile-tab-entry-card {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: var(--profile-tab-card-height);
+      min-height: var(--profile-tab-card-height);
+      max-height: var(--profile-tab-card-height);
+      border-color: rgba(192, 132, 252, 0.26);
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .profile-tab-entry-card:hover {
+      border-color: rgba(244, 114, 182, 0.42);
+      box-shadow: 0 12px 24px rgba(88, 28, 135, 0.2);
+    }
+    .profile-tab-entry-card .content-library-entry-media {
+      flex: 0 0 9.5rem;
+      height: 9.5rem;
+      min-height: 9.5rem;
+      max-height: 9.5rem;
+    }
+    .profile-tab-entry-card .content-library-entry-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      padding: 0.75rem;
+      gap: 0.35rem;
+    }
+    .profile-tab-entry-card .content-library-entry-meta {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .profile-tab-entry-card .content-library-entry-meta span:nth-of-type(n+2) {
+      display: none;
+    }
+    .profile-tab-entry-card .content-library-entry-title a {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+    .profile-tab-entry-card .content-library-entry-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      flex: 1 1 auto;
+    }
+    .profile-tab-entry-card .content-library-entry-footer {
+      margin-top: auto;
+    }
+    .profile-tab-carousel-controls {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .profile-tab-carousel-control {
+      position: absolute;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(15, 23, 42, 0.28);
+      color: #f3e8ff;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+      pointer-events: auto;
+    }
+    .profile-tab-carousel-control[data-direction="prev"] {
+      left: 0.35rem;
+    }
+    .profile-tab-carousel-control[data-direction="next"] {
+      right: 0.35rem;
+    }
+    .profile-tab-carousel-control:hover:not(:disabled) {
+      border-color: rgba(244, 114, 182, 0.58);
+      background: rgba(88, 28, 135, 0.42);
+      color: #ffffff;
+    }
+    .profile-tab-carousel-control:focus-visible {
+      outline: 2px solid rgba(168, 85, 247, 0.9);
+      outline-offset: 2px;
+    }
+    .profile-certificate-item {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.05);
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+    .profile-certificate-item:hover {
+      border-color: rgba(192, 132, 252, 0.42);
+      box-shadow: 0 10px 22px rgba(88, 28, 135, 0.18);
+    }
+    .profile-certificate-toggle {
+      width: 100%;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      text-align: left;
+      padding: 0.85rem 1rem;
+    }
+    .profile-certificate-arrow {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      color: #e9d5ff;
+      transition: transform 220ms ease;
+    }
+    .profile-certificate-toggle[aria-expanded="true"] .profile-certificate-arrow {
+      transform: rotate(90deg);
+    }
+    .profile-certificate-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 220ms ease, opacity 220ms ease;
+    }
+    .profile-certificate-content[aria-hidden="false"] {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+    .profile-certificate-content-inner {
+      overflow: hidden;
+      padding: 0 1rem 0;
+    }
+    .profile-certificate-content[aria-hidden="false"] .profile-certificate-content-inner {
+      padding-bottom: 1rem;
+    }
+    .profile-tab-content .content-library-entry-title a {
+      border-radius: 0.25rem;
+    }
+    .profile-tab-content .content-library-entry-title a:focus-visible,
+    .profile-tab-content .content-library-entry-footer a:focus-visible,
+    .profile-certificate-toggle:focus-visible {
+      outline: 2px solid rgba(168, 85, 247, 0.9);
+      outline-offset: 2px;
+    }
+    .light .profile-tab-content, [data-theme="light"] .profile-tab-content {
+      border-color: rgba(126, 34, 206, 0.26);
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.08), rgba(255, 255, 255, 0.95));
+    }
+    .light .profile-tab-card-list > li.profile-tab-empty-item,
+    [data-theme="light"] .profile-tab-card-list > li.profile-tab-empty-item {
+      border-color: rgba(126, 34, 206, 0.22);
+      background: rgba(255, 255, 255, 0.94);
+      color: #4b5563;
+    }
+    .light .profile-certificate-item, [data-theme="light"] .profile-certificate-item {
+      border-color: rgba(126, 34, 206, 0.22);
+      background: rgba(255, 255, 255, 0.94);
+    }
+    .light .profile-certificate-arrow, [data-theme="light"] .profile-certificate-arrow {
+      color: #7e22ce;
+    }
+    .light .profile-tab-carousel-control, [data-theme="light"] .profile-tab-carousel-control {
+      border-color: rgba(126, 34, 206, 0.4);
+      background: rgba(255, 255, 255, 0.78);
+      color: #7e22ce;
+    }
+    .light .profile-tab-carousel-control:hover:not(:disabled), [data-theme="light"] .profile-tab-carousel-control:hover:not(:disabled) {
+      border-color: rgba(147, 51, 234, 0.55);
+      background: rgba(233, 213, 255, 0.9);
+      color: #581c87;
+    }
+    @media (max-width: 1023px) {
+      .profile-tab-card-list {
+        --profile-tab-card-columns: 2;
+      }
+    }
+    @media (max-width: 639px) {
+      .profile-tab-card-list {
+        --profile-tab-card-columns: 1;
+        --profile-tab-card-height: 21rem;
+      }
+      .profile-tab-entry-card .content-library-entry-media {
+        flex-basis: 8.75rem;
+        height: 8.75rem;
+        min-height: 8.75rem;
+        max-height: 8.75rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .profile-pulse-dot {
+        animation: none;
+      }
+      .profile-fancy-card,
+      .profile-fancy-cta,
+      .profile-tab-entry-card,
+      .profile-tab-carousel-control,
+      .profile-certificate-item,
+      .profile-certificate-arrow,
+      .profile-certificate-content {
+        transition: none;
+      }
+      .profile-fancy-card:hover,
+      .profile-fancy-cta:hover {
+        transform: none;
+      }
+    }
+    .profile-box-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-box-shimmer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.4) 25%, rgba(236,72,153,0.4) 50%, rgba(168,85,247,0.4) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer-border 4s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .profile-box-shimmer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 30px;
+      animation: scan-line 6s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer-border {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes scan-line {
+      0% { background-position: 0 -100%; }
+      100% { background-position: 0 200%; }
+    }
+    @keyframes avatar-ring-pulse {
+      0%, 100% { border-color: rgba(192,132,252,0.6); box-shadow: 0 0 15px rgba(168,85,247,0.25); }
+      50% { border-color: rgba(244,114,182,0.6); box-shadow: 0 0 25px rgba(236,72,153,0.3); }
+    }
+    @keyframes sparkle-pixel {
+      0%, 100% { opacity: 0; }
+      15%, 85% { opacity: 0; }
+      25% { opacity: 1; box-shadow: 5px 0 0 rgba(236,72,153,0.5), 0 5px 0 rgba(168,85,247,0.4), -5px 0 0 rgba(192,132,252,0.3); }
+      50% { opacity: 1; box-shadow: 0 -5px 0 rgba(236,72,153,0.5), 5px 5px 0 rgba(168,85,247,0.4), -5px 5px 0 rgba(192,132,252,0.3); }
+      75% { opacity: 1; box-shadow: -5px 0 0 rgba(236,72,153,0.5), 5px 0 0 rgba(168,85,247,0.4), 0 -5px 0 rgba(192,132,252,0.3); }
+    }
+    @keyframes progress-glow {
+      0%, 100% { box-shadow: 0 0 6px rgba(168,85,247,0.3); }
+      50% { box-shadow: 0 0 14px rgba(168,85,247,0.6); }
+    }
+    .profile-avatar-ring {
+      animation: avatar-ring-pulse 3s ease-in-out infinite;
+    }
+    .profile-sparkle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 0;
+      background: rgba(168,85,247,0.7);
+      box-shadow: 5px 0 0 rgba(236,72,153,0.5), 0 5px 0 rgba(168,85,247,0.4), -5px 0 0 rgba(192,132,252,0.3);
+      animation: sparkle-pixel 3s steps(1) infinite;
+      pointer-events: none;
+      image-rendering: pixelated;
+    }
+    .profile-xp-glow {
+      text-shadow: 0 0 8px rgba(168,85,247,0.5);
+    }
+    .profile-progress-glow {
+      animation: progress-glow 2s ease-in-out infinite;
+    }
+  </style>
+  <link rel="stylesheet" href="src/css/spacing.css">
+  <link rel="stylesheet" href="src/css/content-library.css">
+  <link rel="stylesheet" href="src/css/auth-mockup.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-sans antialiased overflow-x-hidden">
+  <div class="fixed inset-0 scanline z-50 pointer-events-none"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-40 nav-blur bg-cyber-dark/80 border-b border-primary-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <span class="font-pixel text-xs text-white">SQ</span>
+          </div>
+          <span class="font-pixel text-xs sm:text-sm text-white group-hover:text-primary-400 transition-colors">SnappinQuiz</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="courses/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.courses">Courses</a>
+          <a href="business/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.business">Business</a>
+          <a href="pricing/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.prices">Pricing</a>
+          <a href="app/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.app">SnappinQuiz App</a>
+          <a href="blog/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.blog">Blog</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+  <div class="relative" data-settings-dropdown-menu>
+    <button type="button" data-settings-dropdown-trigger aria-labelledby="settings-trigger-label" aria-expanded="false" class="btn-neutral inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.88 2h-3.76a.5.5 0 00-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.73 8.48a.5.5 0 00.12.64l2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.69.22l2.39-.96c.5.4 1.05.72 1.63.95l.36 2.53c.03.25.24.43.49.43h3.76c.25 0 .46-.18.49-.43l.36-2.53c.58-.23 1.13-.55 1.63-.95l2.39.96c.26.12.55.02.69-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"></path>
+      </svg>
+      <span id="settings-trigger-label" class="sr-only" data-i18n="profil-einstellungen">Profile settings</span>
+    </button>
+    <div data-settings-dropdown class="hidden absolute right-0 z-50 mt-2 w-[calc(100vw-1rem)] sm:w-80 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/settings/" data-auth-settings class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="alle einstellungen">All settings</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" data-theme-toggle aria-pressed="false" class="flex w-full items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="nav.theme">Theme</span>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+          <span data-theme-current-label aria-live="polite">Dark mode</span>
+          <span data-theme-switch-track class="relative inline-flex h-6 w-12 items-center rounded-full border border-white/20 bg-white/10 p-0.5 transition-colors duration-200" aria-hidden="true">
+            <svg data-theme-switch-icon="light" class="absolute left-1 h-3 w-3 text-yellow-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M7 0h2v2H7zM7 14h2v2H7zM0 7h2v2H0zM14 7h2v2h-2zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2zM6 5h4v1h1v4h-1v1H6v-1H5V6h1z"/>
+            </svg>
+            <svg data-theme-switch-icon="dark" class="absolute right-1 h-3 w-3 text-primary-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M10.6 1.4A6.4 6.4 0 1014.6 13a5.4 5.4 0 11-4-11.6z"/>
+            </svg>
+            <span data-theme-switch-thumb class="inline-block h-5 w-5 rounded-full bg-white/90 shadow transition-transform duration-200"></span>
+          </span>
+        </span>
+      </button>
+      <details data-settings-menu="language" class="rounded-lg">
+        <summary data-lang-toggle data-settings-trigger class="flex w-full cursor-pointer list-none items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          <span data-i18n="nav.language">Language</span>
+          <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+            <span data-lang-indicator>German</span>
+            <svg data-setting-chevron class="h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        </summary>
+        <div class="mt-2 grid gap-2 pl-2" data-language-options>
+          <button type="button" data-lang-option="de" data-option-key="deutsch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>German</span>
+          </button>
+          <button type="button" data-lang-option="en" data-option-key="englisch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>English</span>
+          </button>
+        </div>
+      </details>
+    </div>
+  </div>
+  <a href="profile-mockup/login/" data-auth-login class="btn-neutral inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-i18n="nav.login">Login</a>
+  <a href="profile-mockup/signup/" data-auth-signup class="inline-flex min-h-[44px] items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 active:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300" data-i18n="nav.signup">Sign up</a>
+  <div class="relative hidden" data-profile-menu data-auth-profile-menu>
+    <button type="button" data-profile-trigger aria-expanded="false" class="inline-flex min-h-[44px] items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-gray-200">
+      <span data-profile-trigger-avatar role="img" aria-label="Profilbild" class="inline-flex h-4 w-4 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/10 bg-cover bg-center text-[0.55rem] font-semibold leading-none text-gray-100">
+        <span data-profile-trigger-avatar-initials aria-hidden="true">DU</span>
+      </span>
+      <span data-i18n="nav.profile">Profile</span>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </button>
+    <div data-profile-dropdown class="hidden absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/profile/" data-auth-profile class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 hover:text-primary-300 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="mein profil">My Profile</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/organisation/" data-auth-owner class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="organisation-dashboard">Organisation Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/admin/" data-auth-admin class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="admin-dashboard">Admin Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/teamleader/" data-auth-teamleader class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="teamleader-dashboard">Team Leader Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="h-px bg-white/10" aria-hidden="true"></div>
+      <button type="button" data-auth-logout class="hidden block w-full min-h-[44px] rounded-lg text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300" data-i18n="nav.logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-300 hover:text-white" aria-label="Open mobile menu" aria-controls="mobile-menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-primary-500/20" style="background-color: var(--bg-secondary);">
+      <div class="px-4 py-4 space-y-3">
+        <a href="courses/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.courses">Courses</a>
+        <a href="business/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.business">Business</a>
+        <a href="pricing/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.prices">Pricing</a>
+        <a href="app/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.app">SnappinQuiz App</a>
+        <a href="blog/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.blog">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative min-h-screen min-h-[100dvh] pt-28 pb-20 auth-mockup-main">
+    <div class="absolute inset-0 bg-grid opacity-40"></div>
+    <div class="absolute top-20 -left-32 w-96 h-96 bg-primary-500/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-12 -right-24 w-80 h-80 bg-accent-500/15 rounded-full blur-3xl"></div>
+
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8" data-auth-mockup data-auth-screen="profile">
+      <header class="text-center space-y-4">
+  <p class="font-pixel text-sm text-primary-400 block" data-profile-i18n="profile.kicker">PROFILE MOCKUP</p>
+  <h1 class="text-4xl sm:text-5xl font-bold text-white" data-profile-i18n="profile.title">My Profile</h1>
+  <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-profile-i18n="profile.subtitle">Your learning progress, favorites, and achievements at a glance.</p>
+</header>
+
+      <!-- data-profile-form -->
+
+      <div class="auth-mockup-panel profile-fancy-panel rounded-2xl space-component-panel">
+        <div
+          id="profile-gamification-dialog"
+          data-profile-gamification-dialog
+          class="fixed inset-0 z-50 hidden flex items-center justify-center bg-cyber-dark/85 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-hidden="true"
+          aria-labelledby="profile-gamification-title"
+          aria-describedby="profile-gamification-dialog-hint"
+        >
+          <div class="w-full max-w-3xl rounded-2xl border border-primary-400/35 bg-cyber-darker p-5 sm:p-6 space-y-5 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-start justify-between gap-4">
+              <div class="space-y-1">
+                <h3 id="profile-gamification-title" data-profile-i18n="profile.gamification.title" class="text-xl font-bold text-white">XP, Level, and Rank System</h3>
+                <p class="text-sm text-gray-300"><span data-profile-i18n="profile.gamification.currentRankPrefix">Current rank:</span> <strong data-profile-gamification-current-rank class="text-primary-200">Scout</strong></p>
+              </div>
+              <button
+                type="button"
+                data-profile-gamification-close
+                class="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+                data-profile-i18n-aria-label="profile.gamification.closeAria"
+                aria-label="Close XP and rank information"
+                data-profile-i18n="profile.gamification.close"
+              >Close</button>
+            </div>
+            <p id="profile-gamification-dialog-hint" class="sr-only" data-profile-i18n="profile.gamification.dialogHint">Press Escape to close the dialog.</p>
+
+            <section class="space-y-2">
+              <h4 class="text-sm font-semibold text-primary-200 uppercase tracking-wide" data-profile-i18n="profile.gamification.howHeading">How XP works</h4>
+              <p class="text-sm leading-6 text-gray-300" data-profile-i18n="profile.gamification.howBody">XP is earned for meaningful learning progress and recurring engagement. Not every click grants XP. Correct answers and completed learning units are rewarded much more strongly than passive interaction.</p>
+            </section>
+
+            <section class="space-y-3">
+              <h4 class="text-sm font-semibold text-primary-200 uppercase tracking-wide" data-profile-i18n="profile.gamification.rewardsHeading">XP rewards</h4>
+              <p class="text-xs text-gray-400" data-profile-i18n="profile.gamification.rewardsHint">Meaningful learning actions give more XP than passive actions. Simply clicking around is not treated as rewardable progress.</p>
+              <div data-profile-gamification-rewards class="space-y-3"></div>
+            </section>
+
+            <section class="space-y-3">
+              <h4 class="text-sm font-semibold text-primary-200 uppercase tracking-wide" data-profile-i18n="profile.gamification.levelHeading">Level progression</h4>
+              <p class="text-sm text-gray-300" data-profile-i18n="profile.gamification.levelBody">Levels require increasing XP. Early levels are reached quickly, later levels take longer, and progression stays motivating without becoming trivial.</p>
+              <ul data-profile-gamification-levels class="grid gap-1 text-sm text-gray-300"></ul>
+            </section>
+
+            <section class="space-y-3">
+              <h4 class="text-sm font-semibold text-primary-200 uppercase tracking-wide" data-profile-i18n="profile.gamification.rankHeading">Ranks</h4>
+              <p class="text-sm text-gray-300" data-profile-i18n="profile.gamification.rankBody">Ranks are assigned automatically from your level and represent long-term progress.</p>
+              <ul data-profile-gamification-ranks class="grid gap-1 text-sm text-gray-300"></ul>
+            </section>
+          </div>
+        </div>
+
+        <section class="settings-shell settings-shell-full-height" aria-label="Profile detail tabs">
+          <aside class="settings-sidebar">
+            <div data-profile-tab-list class="settings-nav-sections" role="tablist" aria-label="Profilbereiche" aria-orientation="vertical">
+              <button type="button" id="profile-tab-overview" role="tab" aria-controls="profile-panel-overview" aria-selected="true" data-profile-tab-target="overview" data-profile-i18n-aria-label="profile.overview" data-profile-i18n-title="profile.overview" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.overview">Profile</span></button>
+              <button type="button" id="profile-tab-reading-history" role="tab" aria-controls="profile-panel-reading-history" aria-selected="false" data-profile-tab-target="reading-history" data-profile-i18n-aria-label="profile.readingHistory" data-profile-i18n-title="profile.readingHistory" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.readingHistory">Leseverlauf</span></button>
+              <button type="button" id="profile-tab-completed-courses" role="tab" aria-controls="profile-panel-completed-courses" aria-selected="false" data-profile-tab-target="completed-courses" data-profile-i18n-aria-label="profile.completedCourses" data-profile-i18n-title="profile.completedCourses" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.completedCourses">Completed courses</span></button>
+              <button type="button" id="profile-tab-favorite-courses" role="tab" aria-controls="profile-panel-favorite-courses" aria-selected="false" data-profile-tab-target="favorite-courses" data-profile-i18n-aria-label="profile.favoriteCourses" data-profile-i18n-title="profile.favoriteCourses" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.favoriteCourses">Kurs-Favoriten</span></button>
+              <button type="button" id="profile-tab-favorite-blog" role="tab" aria-controls="profile-panel-favorite-blog" aria-selected="false" data-profile-tab-target="favorite-blog" data-profile-i18n-aria-label="profile.favoriteBlog" data-profile-i18n-title="profile.favoriteBlog" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.favoriteBlog">Blog-Favoriten</span></button>
+              <button type="button" id="profile-tab-certificates" role="tab" aria-controls="profile-panel-certificates" aria-selected="false" data-profile-tab-target="certificates" data-profile-i18n-aria-label="profile.certificates" data-profile-i18n-title="profile.certificates" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span class="block flex-1 min-w-0 truncate" data-profile-i18n="profile.certificates">Erreichte Zertifikate</span></button>
+            </div>
+            <div class="mt-3 border-t border-white/10 pt-3">
+              <a href="profile-mockup/settings/" class="settings-tab-button !min-h-[44px] text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-profile-i18n="profile.settingsCta">
+                Go to settings
+              </a>
+            </div>
+          </aside>
+
+          <section class="settings-content">
+            <section id="profile-panel-overview" data-profile-tab-panel="overview" role="tabpanel" aria-labelledby="profile-tab-overview" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-4">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.overview">Profile</span></h3>
+              <section class="rounded-2xl border border-primary-400/35 bg-gradient-to-br from-primary-500/20 via-cyber-dark/60 to-accent-500/20 p-5 sm:p-6 space-y-5 shadow-lg shadow-primary-500/10" aria-label="Profile overview">
+                <div class="flex items-center gap-5">
+                  <div class="relative shrink-0">
+                    <div class="profile-pulse-dot absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-cyber-green z-10" aria-hidden="true"></div>
+                    <div class="absolute inset-0 -m-2 rounded-full bg-primary-500/20 blur-xl" aria-hidden="true"></div>
+                    <div data-profile-hero-avatar role="img" aria-label="Profilbild Demo User" class="profile-avatar-ring relative flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-primary-400/60 bg-gradient-to-br from-primary-400/30 to-accent-400/30 text-xl font-semibold text-white">DU</div>
+                  </div>
+                  <div class="min-w-0 flex-1 space-y-2">
+                    <div class="flex flex-wrap items-start justify-between gap-2">
+                      <div class="min-w-0">
+                        <p class="text-xs uppercase tracking-wide text-gray-400">Spielerprofil</p>
+                        <h2 data-profile-hero-name class="truncate text-lg font-bold font-pixel text-white">Demo User</h2>
+                      </div>
+                      <div class="flex items-center gap-2 text-xs">
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-400/40 bg-primary-500/20 px-3 py-1.5 text-primary-100">
+                          <span class="font-pixel text-[0.6rem] uppercase tracking-wide" data-profile-i18n="profile.levelLabel">Level</span>
+                          <strong data-profile-level class="font-semibold profile-xp-glow">6</strong>
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-400/40 bg-primary-500/20 px-3 py-1.5 text-primary-100">
+                          <span class="font-pixel text-[0.6rem] uppercase tracking-wide" data-profile-i18n="profile.rankLabel">RANG</span>
+                          <strong data-profile-rank class="font-semibold profile-xp-glow">Scout</strong>
+                        </span>
+                      </div>
+                    </div>
+                    <p class="text-xs text-gray-300">
+                      <span data-profile-i18n="profile.totalXpLabel">Gesamt-XP</span>:
+                      <strong data-profile-total-xp class="text-primary-200 profile-xp-glow">860 XP</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between gap-3 text-xs text-gray-300">
+                    <span data-profile-level-progress-label>860 / 1000 XP</span>
+                    <button
+                      type="button"
+                      data-profile-gamification-open
+                      class="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-2.5 py-1 text-[0.65rem] font-semibold text-primary-100 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+                      data-profile-i18n="profile.gamification.open"
+                      aria-haspopup="dialog"
+                      aria-controls="profile-gamification-dialog"
+                    >XP &amp;amp; R&amp;auml;nge</button>
+                  </div>
+                  <div class="h-3 overflow-hidden rounded-full bg-white/10 border border-white/10" role="presentation" aria-hidden="true">
+                    <div data-profile-level-progress class="h-full rounded-full bg-gradient-to-r from-primary-500 via-accent-500 to-primary-400 transition-all duration-700 motion-reduce:transition-none" style="width: 0;"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label="Profile stats">
+                <article class="profile-fancy-card shared-fancy-metric-card rounded-xl p-3 sm:p-4">
+                  <p class="text-xs text-gray-300" data-profile-i18n="profile.stats.completedCourses">Completed courses</p>
+                  <p data-profile-completed-count class="shared-fancy-metric-value mt-2 text-2xl font-bold text-white">0</p>
+                </article>
+                <article class="profile-fancy-card shared-fancy-metric-card rounded-xl p-3 sm:p-4">
+                  <p class="text-xs text-gray-300" data-profile-i18n="profile.stats.favorites">Favoriten</p>
+                  <p data-profile-favorites-count class="shared-fancy-metric-value mt-2 text-2xl font-bold text-white">0</p>
+                </article>
+                <article class="profile-fancy-card shared-fancy-metric-card rounded-xl p-3 sm:p-4">
+                  <p class="text-xs text-gray-300" data-profile-i18n="profile.stats.certificates">Certificates</p>
+                  <p data-profile-certificates-count class="shared-fancy-metric-value mt-2 text-2xl font-bold text-white">0</p>
+                </article>
+                <article class="profile-fancy-card shared-fancy-metric-card rounded-xl p-3 sm:p-4">
+                  <p class="text-xs text-gray-300" data-profile-i18n="profile.stats.streak">Lernserie</p>
+                  <p class="mt-2 text-2xl font-bold text-white"><span data-profile-streak-count class="shared-fancy-metric-value">0</span> <span class="text-sm font-medium text-primary-200" data-profile-i18n="profile.stats.days">Tage</span></p>
+                </article>
+              </section>
+            </section>
+
+            <section id="profile-panel-reading-history" data-profile-tab-panel="reading-history" role="tabpanel" aria-labelledby="profile-tab-reading-history" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-3 hidden">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.readingHistory">Leseverlauf</span></h3>
+              <ul data-profile-reading-history class="profile-tab-card-list text-sm text-gray-300"></ul>
+            </section>
+
+            <section id="profile-panel-completed-courses" data-profile-tab-panel="completed-courses" role="tabpanel" aria-labelledby="profile-tab-completed-courses" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-3 hidden">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.completedCourses">Completed courses</span></h3>
+              <ul data-profile-completed-courses class="profile-tab-card-list text-sm text-gray-300"></ul>
+            </section>
+
+            <section id="profile-panel-favorite-courses" data-profile-tab-panel="favorite-courses" role="tabpanel" aria-labelledby="profile-tab-favorite-courses" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-3 hidden">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.favoriteCourses">Kurs-Favoriten</span></h3>
+              <ul data-profile-favorite-courses class="profile-tab-card-list text-sm text-gray-300"></ul>
+            </section>
+
+            <section id="profile-panel-favorite-blog" data-profile-tab-panel="favorite-blog" role="tabpanel" aria-labelledby="profile-tab-favorite-blog" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-3 hidden">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.favoriteBlog">Blog-Favoriten</span></h3>
+              <ul data-profile-favorite-blog class="profile-tab-card-list text-sm text-gray-300"></ul>
+            </section>
+
+            <section id="profile-panel-certificates" data-profile-tab-panel="certificates" role="tabpanel" aria-labelledby="profile-tab-certificates" class="profile-fancy-card profile-tab-content settings-panel rounded-xl p-4 space-y-3 hidden">
+              <h3 class="profile-fancy-heading leading-snug font-pixel text-sm text-primary-300"><span data-profile-i18n="profile.certificates">Erreichte Zertifikate</span></h3>
+              <ul data-profile-certificates class="grid gap-3 text-sm text-gray-300"></ul>
+            </section>
+          </section>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-cyber-darker border-t border-white/10 py-16 space-section-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center"><span class="font-pixel text-xs text-white">SQ</span></div>
+          <span class="font-pixel text-sm text-white">SnappinQuiz</span>
+        </a>
+        <p class="text-sm text-gray-400 mb-4">Gamified cybersecurity awareness training for individuals and businesses.</p>
+        <p class="inline-flex items-center gap-1 py-3 text-sm text-gray-400">
+          <span>Your partner:</span>
+          <a href="https://toowoxx.de/" class="inline-flex items-center hover:text-white transition-colors rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" target="_blank" rel="noopener noreferrer" aria-label="Toowoxx (opens in a new tab)">toowoxx.de</a>
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Product</h4>
+        <ul class="space-y-2">
+          <li><a href="courses/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Courses</a></li>
+          <li><a href="app/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">SnappinQuiz App</a></li>
+          <li><a href="pricing/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Company</h4>
+        <ul class="space-y-2">
+          <li><a href="about-us/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">About Us</a></li>
+          <li><a href="blog/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Blog</a></li>
+          <li><a href="business/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Legal</h4>
+        <ul class="space-y-2">
+          <li><a href="datenschutzerklarung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Privacy Policy</a></li>
+          <li><a href="impressum/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Imprint</a></li>
+          <li><a href="widerrufsbelehrung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Cancellation Policy</a></li>
+          <li><a href="agb/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Terms and Conditions</a></li>
+          <li><a href="faq/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">Â© 2026 SnappinQuiz. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+  <script src="src/js/main.js"></script>
+  <script src="src/js/profile-mockup.js"></script>
+</body>
+</html>
+

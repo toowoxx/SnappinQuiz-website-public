@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SnappinQuiz - Cybersecurity Awareness Training. Interaktive Schulungen für IT-Sicherheit, Phishing-Erkennung und DSGVO-Compliance.">
+  <title>SnappinQuiz - Cybersecurity Awareness Training</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS (CDN for development - use built CSS for production) -->
+  <script src="src/js/tailwind-font-size-tokens.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#faf5ff',
+              100: '#f3e8ff',
+              200: '#e9d5ff',
+              300: '#d8b4fe',
+              400: '#c084fc',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
+            },
+            accent: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f9a8d4',
+              400: '#f472b6',
+              500: '#ec4899',
+            },
+            cyber: {
+              dark: '#0a0a0f',
+              darker: '#050508',
+              purple: '#aa96d2',
+              pink: '#fcd3eb',
+              green: '#00ff88',
+              blue: '#00d4ff',
+            }
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+          },
+          fontSize: window.SNAPPINQUIZ_FONT_SIZE_TOKENS,
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Theme variables */
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #050508;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+      --font-size-ui-2xs: var(--font-size-label-caption, 0.625rem);
+      --font-size-ui-xs: var(--font-size-xs, 0.75rem);
+      --font-size-ui-sm: var(--font-size-sm, 0.875rem);
+      --font-size-ui-base: var(--font-size-base, 1rem);
+      --font-size-ui-lg: var(--font-size-lg, 1.125rem);
+    }
+    .light, [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-card: rgba(0, 0, 0, 0.02);
+      --border-color: rgba(0, 0, 0, 0.1);
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light .bg-cyber-dark, [data-theme="light"] .bg-cyber-dark { background-color: #ffffff; }
+    .light .bg-cyber-darker, [data-theme="light"] .bg-cyber-darker { background-color: #f9fafb; }
+    .light .bg-white\/5, [data-theme="light"] .bg-white\/5 { background-color: rgba(0, 0, 0, 0.03); }
+    .light .border-white\/10, [data-theme="light"] .border-white\/10 { border-color: rgba(0, 0, 0, 0.1); }
+    .light .border-primary-500\/20, [data-theme="light"] .border-primary-500\/20 { border-color: rgba(168, 85, 247, 0.3); }
+    .light .text-white, [data-theme="light"] .text-white { color: var(--text-primary); }
+    .light .text-gray-300, [data-theme="light"] .text-gray-300 { color: var(--text-secondary); }
+    .light .text-gray-400, [data-theme="light"] .text-gray-400 { color: var(--text-secondary); }
+    .light .nav-blur, [data-theme="light"] .nav-blur { background-color: rgba(255, 255, 255, 0.9); }
+    .light .text-glow, [data-theme="light"] .text-glow { text-shadow: none; }
+
+    /* Custom styles */
+    .pixel-border {
+      box-shadow:
+        4px 0 0 0 currentColor,
+        -4px 0 0 0 currentColor,
+        0 4px 0 0 currentColor,
+        0 -4px 0 0 currentColor;
+    }
+
+    .pixel-border-sm {
+      box-shadow:
+        2px 0 0 0 currentColor,
+        -2px 0 0 0 currentColor,
+        0 2px 0 0 currentColor,
+        0 -2px 0 0 currentColor;
+    }
+
+    .glow-purple {
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+    }
+
+    .glow-pink {
+      box-shadow: 0 0 30px rgba(244, 114, 182, 0.4);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    }
+
+    .gradient-border {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      padding: 2px;
+    }
+
+    .gradient-border-inner {
+      background: #0a0a0f;
+    }
+
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .scanline {
+      background: linear-gradient(
+        transparent 0%,
+        rgba(168, 85, 247, 0.03) 50%,
+        transparent 100%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.7); }
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    .cursor-blink::after {
+      content: '|';
+      animation: blink 1s infinite;
+    }
+
+    /* Pixel art decorations */
+    .pixel-decoration {
+      image-rendering: pixelated;
+    }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0f;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #a855f7, #ec4899);
+      border-radius: 4px;
+    }
+
+    /* Card hover effects */
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Button pixel effect */
+    .btn-pixel {
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pixel:hover {
+      transform: translate(-2px, -2px);
+    }
+
+    .btn-pixel:active {
+      transform: translate(0, 0);
+    }
+
+    /* Navigation blur */
+    .nav-blur {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-link-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .nav-login-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 64px;
+      white-space: nowrap;
+    }
+    .nav-lang-fixed {
+      width: 72px;
+      justify-content: center;
+    }
+
+    .fs-ui-2xs { font-size: var(--font-size-ui-2xs); }
+    .fs-ui-xs { font-size: var(--font-size-ui-xs); }
+    .fs-ui-sm { font-size: var(--font-size-ui-sm); }
+    .fs-ui-base { font-size: var(--font-size-ui-base); }
+    .fs-ui-lg { font-size: var(--font-size-ui-lg); }
+
+    .scroll-indicator-label {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .safe-area-bottom-offset {
+      bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+    }
+  </style>
+  <link rel="stylesheet" href="src/css/spacing.css">
+  <link rel="stylesheet" href="src/css/content-library.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-sans antialiased">
+  <!-- Scanline overlay -->
+  <div class="fixed inset-0 scanline z-50 pointer-events-none"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-40 nav-blur bg-cyber-dark/80 border-b border-primary-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <span class="font-pixel text-xs text-white">SQ</span>
+          </div>
+          <span class="font-pixel text-xs sm:text-sm text-white group-hover:text-primary-400 transition-colors">
+            SnappinQuiz
+          </span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="courses/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.courses">Kurse</a>
+          <a href="business/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.business">Business</a>
+          <a href="app/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.app">SnappinQuiz App</a>
+          <a href="blog/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.blog">Blog</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+  <div class="relative" data-settings-dropdown-menu>
+    <button type="button" data-settings-dropdown-trigger aria-labelledby="settings-trigger-label" aria-expanded="false" class="btn-neutral inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.88 2h-3.76a.5.5 0 00-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.73 8.48a.5.5 0 00.12.64l2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.69.22l2.39-.96c.5.4 1.05.72 1.63.95l.36 2.53c.03.25.24.43.49.43h3.76c.25 0 .46-.18.49-.43l.36-2.53c.58-.23 1.13-.55 1.63-.95l2.39.96c.26.12.55.02.69-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"></path>
+      </svg>
+      <span id="settings-trigger-label" class="sr-only" data-i18n="profil-einstellungen">Profil-Einstellungen</span>
+    </button>
+    <div data-settings-dropdown class="hidden absolute right-0 z-50 mt-2 w-[calc(100vw-1rem)] sm:w-80 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/settings/" data-auth-settings class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="alle einstellungen">Alle Einstellungen</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" data-theme-toggle aria-pressed="false" class="flex w-full items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="nav.theme">Theme</span>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+          <span data-theme-current-label aria-live="polite">Dunkelmodus</span>
+          <span data-theme-switch-track class="relative inline-flex h-6 w-12 items-center rounded-full border border-white/20 bg-white/10 p-0.5 transition-colors duration-200" aria-hidden="true">
+            <svg data-theme-switch-icon="light" class="absolute left-1 h-3 w-3 text-yellow-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M7 0h2v2H7zM7 14h2v2H7zM0 7h2v2H0zM14 7h2v2h-2zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2zM6 5h4v1h1v4h-1v1H6v-1H5V6h1z"/>
+            </svg>
+            <svg data-theme-switch-icon="dark" class="absolute right-1 h-3 w-3 text-primary-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M10.6 1.4A6.4 6.4 0 1014.6 13a5.4 5.4 0 11-4-11.6z"/>
+            </svg>
+            <span data-theme-switch-thumb class="inline-block h-5 w-5 rounded-full bg-white/90 shadow transition-transform duration-200"></span>
+          </span>
+        </span>
+      </button>
+      <details data-settings-menu="language" class="rounded-lg">
+        <summary data-lang-toggle data-settings-trigger class="flex w-full cursor-pointer list-none items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          <span data-i18n="nav.language">Language</span>
+          <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+            <span data-lang-indicator>Deutsch</span>
+            <svg data-setting-chevron class="h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        </summary>
+        <div class="mt-2 grid gap-2 pl-2" data-language-options>
+          <button type="button" data-lang-option="de" data-option-key="deutsch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>Deutsch</span>
+          </button>
+          <button type="button" data-lang-option="en" data-option-key="englisch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>English</span>
+          </button>
+        </div>
+      </details>
+    </div>
+  </div>
+  <a href="profile-mockup/login/" data-auth-login class="btn-neutral inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-i18n="nav.login">Login</a>
+  <a href="profile-mockup/signup/" data-auth-signup class="inline-flex min-h-[44px] items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 active:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300" data-i18n="nav.signup">Sign up</a>
+  <div class="relative hidden" data-profile-menu data-auth-profile-menu>
+    <button type="button" data-profile-trigger aria-expanded="false" class="inline-flex min-h-[44px] items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-gray-200">
+      <span data-profile-trigger-avatar role="img" aria-label="Profilbild" class="inline-flex h-4 w-4 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/10 bg-cover bg-center text-[0.55rem] font-semibold leading-none text-gray-100">
+        <span data-profile-trigger-avatar-initials aria-hidden="true">DU</span>
+      </span>
+      <span data-i18n="nav.profile">Profil</span>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </button>
+    <div data-profile-dropdown class="hidden absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/profile/" data-auth-profile class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 hover:text-primary-300 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="mein profil">Mein Profil</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/organisation/" data-auth-owner class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="organisation-dashboard">Organisation-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/admin/" data-auth-admin class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="admin-dashboard">Admin-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/teamleader/" data-auth-teamleader class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="teamleader-dashboard">Teamleader-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="h-px bg-white/10" aria-hidden="true"></div>
+      <button type="button" data-auth-logout class="hidden block w-full min-h-[44px] rounded-lg text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300" data-i18n="nav.logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-300 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-primary-500/20" style="background-color: var(--bg-secondary);">
+      <div class="px-4 py-4 space-y-3">
+        <a href="courses/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.courses">Kurse</a>
+        <a href="business/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.business">Business</a>
+        <a href="app/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.app">SnappinQuiz App</a>
+        <a href="blog/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.blog">Blog</a>
+        <div class="flex items-center gap-3 pt-4 border-t border-primary-500/20">
+          <button data-theme-toggle class="p-2 rounded-lg bg-white/5 hover:bg-white/10">
+            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </button>
+          <button data-lang-toggle class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300">
+            <span data-lang-indicator>DE</span>
+          </button>
+        </div>
+        <div class="pt-4 border-t border-primary-500/20">
+          <a href="profile-mockup/login/" data-auth-login class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.login">Login</a>
+          <a href="profile-mockup/profile/" data-auth-profile class="hidden block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.profile">Profil</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center space-section-hero pt-20 overflow-hidden">
+    <!-- Background grid -->
+    <div class="absolute inset-0 bg-grid opacity-50"></div>
+
+    <!-- Gradient orbs -->
+    <div class="absolute top-1/4 -left-32 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Hero content -->
+        <div class="text-center lg:pb-6">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 bg-primary-500/10 border border-primary-500/30 rounded-full px-4 py-2 mb-6">
+            <span class="w-2 h-2 bg-cyber-green rounded-full animate-pulse"></span>
+            <span class="text-sm font-mono text-primary-300">Neu: KI-gesteuerte Phishing-Simulation</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <span class="font-pixel text-2xl sm:text-3xl lg:text-4xl block mb-4 text-glow text-primary-400">
+              LEVEL UP
+            </span>
+            <span class="text-white">
+              Cybersecurity
+            </span>
+            <br>
+            <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+              Awareness Training
+            </span>
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="text-lg sm:text-xl text-gray-400 mb-8 space-lead max-w-xl mx-auto">
+            Interaktive Schulungen, die wirklich haften bleiben. Schützen Sie Ihr Team vor Phishing, Social Engineering und Cyber-Bedrohungen.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#" class="btn-pixel bg-gradient-to-r from-primary-500 to-accent-500 text-white px-8 py-4 rounded-xl text-lg font-semibold animate-pulse-glow inline-flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Kostenlos starten
+            </a>
+            <a href="business/" class="btn-neutral btn-pixel bg-white/5 border border-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white/10 transition-colors inline-flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+              Business-Lösungen
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Hero visual -->
+        <div class="relative">
+          <div class="animate-float">
+            <!-- Mock app/device showcase -->
+            <div class="relative mx-auto w-full max-w-md">
+              <!-- Phone mockup -->
+              <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-[3rem] p-3 glow-purple">
+                <div class="bg-cyber-dark rounded-[2.5rem] overflow-hidden">
+                  <!-- Status bar -->
+                  <div class="bg-cyber-darker px-6 py-3 flex items-center justify-between">
+                    <span class="text-xs text-gray-400">9:41</span>
+                    <div class="flex items-center gap-1">
+                      <div class="w-4 h-2 bg-cyber-green rounded-sm"></div>
+                    </div>
+                  </div>
+
+                  <!-- App content -->
+                  <div class="p-6 space-y-4">
+                    <!-- App header -->
+                    <div class="flex items-center gap-3">
+                      <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
+                        <span class="font-pixel text-micro text-white">SQ</span>
+                      </div>
+                      <div>
+                        <h3 class="font-semibold text-white">SnappinQuiz</h3>
+                        <p class="text-xs text-gray-400">Dein tägliches Training</p>
+                      </div>
+                    </div>
+
+                    <!-- Progress card -->
+                    <div class="bg-primary-500/10 border border-primary-500/30 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-300">Wochenziel</span>
+                        <span class="font-pixel text-xs text-cyber-green">85%</span>
+                      </div>
+                      <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+                        <div class="h-full w-[85%] bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <!-- Quiz preview -->
+                    <div class="bg-white/5 rounded-xl p-4">
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="font-pixel text-caption text-accent-400">QUIZ</span>
+                        <span class="text-xs text-gray-400">Phishing erkennen</span>
+                      </div>
+                      <p class="text-sm text-white mb-4">Ist diese E-Mail legitim?</p>
+                      <div class="space-y-2">
+                        <div class="bg-primary-500/20 border border-primary-500/50 rounded-lg p-3 text-sm text-white">
+                          A) Ja, sieht vertrauenswürdig aus
+                        </div>
+                        <div class="bg-cyber-green/20 border border-cyber-green/50 rounded-lg p-3 text-sm text-white flex items-center gap-2">
+                          <svg class="w-4 h-4 text-cyber-green" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          B) Nein, verdächtige URL
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Stats row -->
+                    <div class="grid grid-cols-3 gap-3">
+                      <div class="bg-white/5 rounded-lg p-3 text-center">
+                        <div class="font-pixel text-lg text-primary-400">12</div>
+                        <div class="text-caption text-gray-400">Streak</div>
+                      </div>
+                      <div class="bg-white/5 rounded-lg p-3 text-center">
+                        <div class="font-pixel text-lg text-accent-400">847</div>
+                        <div class="text-caption text-gray-400">Punkte</div>
+                      </div>
+                      <div class="bg-white/5 rounded-lg p-3 text-center">
+                        <div class="font-pixel text-lg text-cyber-green">A+</div>
+                        <div class="text-caption text-gray-400">Level</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Floating elements -->
+              <div class="absolute -top-4 -right-4 bg-cyber-green/20 border border-cyber-green/50 rounded-lg px-3 py-2 animate-float" style="animation-delay: 0.5s;">
+                <span class="font-pixel text-xs text-cyber-green">+50 XP</span>
+              </div>
+              <div class="absolute -bottom-4 -left-4 bg-accent-500/20 border border-accent-500/50 rounded-lg px-3 py-2 animate-float" style="animation-delay: 1s;">
+                <span class="font-pixel text-xs text-accent-400">STREAK!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <a href="#features" class="absolute safe-area-bottom-offset left-1/2 -translate-x-1/2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <span class="flex flex-col items-center gap-2 animate-bounce motion-reduce:animate-none">
+        <span class="font-pixel fs-ui-2xs text-gray-400 scroll-indicator-label whitespace-nowrap">Nach unten scrollen</span>
+        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+      </span>
+    </a>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="relative scroll-mt-24 md:scroll-mt-28 space-section-lg py-24 overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section header -->
+      <div class="text-center mb-16 space-header-lg">
+        <span class="font-pixel text-sm text-primary-400 mb-4 block space-overline">FEATURES</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 space-title">
+          Warum SnappinQuiz?
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Gamifiziertes Lernen, das Spass macht und nachhaltig wirkt.
+        </p>
+      </div>
+
+      <!-- Feature cards -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-primary-500/20 to-primary-500/5 border border-primary-500/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Interaktive Quizze</h3>
+          <p class="text-gray-400">Kurze, unterhaltsame Lektionen mit sofortigem Feedback. Lernen Sie in kleinen Häppchen, die zu Ihrem Alltag passen.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-accent-500/20 to-accent-500/5 border border-accent-500/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Phishing-Simulation</h3>
+          <p class="text-gray-400">Realistische Szenarien zum Üben. Erkennen Sie Bedrohungen, bevor sie zu echten Problemen werden.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-cyber-green/20 to-cyber-green/5 border border-cyber-green/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Zertifikate</h3>
+          <p class="text-gray-400">Offizielle Nachweise für abgeschlossene Schulungen. Perfekt für Compliance-Anforderungen und Audits.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-cyber-blue/20 to-cyber-blue/5 border border-cyber-blue/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-cyber-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Team-Management</h3>
+          <p class="text-gray-400">Verwalten Sie Teams, weisen Sie Kurse zu und verfolgen Sie den Fortschritt Ihrer Mitarbeiter in Echtzeit.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 border border-yellow-500/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Offline-Modus</h3>
+          <p class="text-gray-400">Lernen Sie überall, auch ohne Internetverbindung. Perfekt für Pendler und Außendienst.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card-hover bg-white/5 border border-white/10 rounded-2xl p-6 group">
+          <div class="w-14 h-14 bg-gradient-to-br from-red-500/20 to-red-500/5 border border-red-500/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Analytics Dashboard</h3>
+          <p class="text-gray-400">Detaillierte Einblicke in Lernfortschritt, Schwachstellen und Verbesserungspotenziale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section id="courses" class="relative space-section-lg py-24 bg-cyber-darker">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section header -->
+      <div class="text-center mb-16 space-header-lg">
+        <span class="font-pixel text-sm text-accent-400 mb-4 block space-overline">KURSE</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 space-title">
+          Umfangreiche Kurs-Bibliothek
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Von IT-Sicherheit über DSGVO bis hin zu KI - alles was Ihre Teams wissen müssen.
+        </p>
+      </div>
+
+      <!-- Course categories -->
+      <div class="content-library-filter-band mb-12">
+        <div class="content-library-filter-shell rounded-2xl p-4 sm:p-6">
+  <div class="flex flex-wrap justify-center gap-2 md:gap-3" role="toolbar" aria-label="Kursbibliothek">
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="all" aria-pressed="true" class="content-library-filter-pill is-active px-4 py-2 rounded-full text-sm font-medium">Alle</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="security" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">IT-Sicherheit</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="phishing" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">Phishing</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="gdpr" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">DSGVO</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="social" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">Social Engineering</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="homeoffice" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">Home-Office</button>
+    <button type="button" aria-controls="landing-courses-grid" data-landing-course-filter="ai" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">KI & Deepfakes</button>
+  </div>
+  <p data-landing-course-filter-status class="sr-only" role="status" aria-live="polite"></p>
+</div>
+
+      </div>
+
+      <!-- Course cards -->
+        <div id="landing-courses-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite">
+          <!-- Course 1 -->
+          <article data-landing-course-category="security" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+            <div data-media-image="course-it-security" class="content-library-entry-media aspect-video bg-gradient-to-br from-primary-500/30 to-accent-500/30">
+              <div class="absolute top-4 left-4">
+                <span class="content-library-entry-tag bg-primary-500/15 text-primary-300 border border-primary-500/30">IT-Sicherheit</span>
+              </div>
+            </div>
+            <div class="content-library-entry-content">
+              <div class="content-library-entry-meta text-sm text-gray-400"><span>8 Lektionen</span><span aria-hidden="true">|</span><span>45 Min</span></div>
+              <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-primary-400 group-focus-within:text-primary-400 transition-colors">
+                <a href="courses/it-sicherheit-grundlagen/" class="inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+                  IT-Sicherheit Grundlagen
+                </a>
+              </h3>
+              <p class="content-library-entry-description text-sm text-gray-400">
+                Der perfekte Einstieg in die Welt der Cybersecurity. Lernen Sie die wichtigsten Begriffe und Konzepte.
+              </p>
+              <div class="content-library-entry-footer">
+                <a href="courses/it-sicherheit-grundlagen/" class="inline-flex items-center gap-2 text-sm font-semibold text-primary-300 hover:text-primary-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+                  Kurs starten <span aria-hidden="true">-></span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Course 2 -->
+          <article data-landing-course-category="phishing" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+            <div data-media-image="course-phishing-awareness" class="content-library-entry-media aspect-video bg-gradient-to-br from-accent-500/30 to-red-500/30">
+              <div class="absolute top-4 left-4">
+                <span class="content-library-entry-tag bg-accent-500/15 text-accent-300 border border-accent-500/30">Phishing</span>
+              </div>
+            </div>
+            <div class="content-library-entry-content">
+              <div class="content-library-entry-meta text-sm text-gray-400"><span>12 Lektionen</span><span aria-hidden="true">|</span><span>90 Min</span></div>
+              <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-accent-400 group-focus-within:text-accent-400 transition-colors">
+                <a href="courses/phishing-awareness-pro/" class="inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400">
+                  Phishing Awareness Pro
+                </a>
+              </h3>
+              <p class="content-library-entry-description text-sm text-gray-400">
+                Erkennen Sie Phishing-Angriffe zuverlässig. Mit echten Beispielen und interaktiven Übungen.
+              </p>
+              <div class="content-library-entry-footer">
+                <a href="courses/phishing-awareness-pro/" class="inline-flex items-center gap-2 text-sm font-semibold text-accent-300 hover:text-accent-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400">
+                  Kurs starten <span aria-hidden="true">-></span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Course 3 -->
+          <article data-landing-course-category="gdpr" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+            <div data-media-image="course-dsgvo" class="content-library-entry-media aspect-video bg-gradient-to-br from-cyber-blue/30 to-cyber-green/30">
+              <div class="absolute top-4 left-4">
+                <span class="content-library-entry-tag bg-cyber-blue/15 text-cyber-blue border border-cyber-blue/40">DSGVO</span>
+              </div>
+            </div>
+            <div class="content-library-entry-content">
+              <div class="content-library-entry-meta text-sm text-gray-400"><span>6 Lektionen</span><span aria-hidden="true">|</span><span>60 Min</span></div>
+              <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-cyber-blue group-focus-within:text-cyber-blue transition-colors">
+                <a href="courses/dsgvo-compliance/" class="inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-blue">
+                  DSGVO Compliance
+                </a>
+              </h3>
+              <p class="content-library-entry-description text-sm text-gray-400">
+                Alles zur Datenschutz-Grundverordnung. Praktische Tipps für den Arbeitsalltag.
+              </p>
+              <div class="content-library-entry-footer">
+                <a href="courses/dsgvo-compliance/" class="inline-flex items-center gap-2 text-sm font-semibold text-cyber-blue hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-blue">
+                  Kurs starten <span aria-hidden="true">-></span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div data-landing-course-empty-state hidden class="content-library-card content-library-empty-state rounded-2xl p-8 text-center text-base font-medium text-gray-300 mt-6" role="status" aria-live="polite">
+          <p data-filter-empty-message></p>
+          <a href="courses/" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-300 hover:text-primary-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            Alle Kurse anzeigen
+            <span aria-hidden="true">-></span>
+          </a>
+        </div>
+
+      <!-- View all link -->
+      <div class="text-center mt-12">
+        <a href="courses/" class="inline-flex items-center gap-2 text-primary-400 font-medium hover:text-primary-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          Alle Kurse anzeigen
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Section -->
+  <section id="business" class="relative space-section-lg py-24 overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30"></div>
+    <div class="absolute top-1/4 -right-32 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Content -->
+        <div>
+          <span class="font-pixel text-sm text-accent-400 mb-4 block space-overline">FÜR UNTERNEHMEN</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 space-title">
+            Enterprise-Lösungen für Ihre Security Awareness
+          </h2>
+          <p class="text-lg text-gray-400 mb-8 space-lead">
+            Schützen Sie Ihr Unternehmen mit maßgeschneiderten Schulungsprogrammen.
+            Von kleinen Teams bis zu internationalen Konzernen.
+          </p>
+
+          <!-- Feature list -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-cyber-green/20 border border-cyber-green/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">SSO Integration</h4>
+                <p class="text-sm text-gray-400">Microsoft, Google und SAML-basierte Authentifizierung</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-cyber-green/20 border border-cyber-green/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">Anpassbare Inhalte</h4>
+                <p class="text-sm text-gray-400">Branchenspezifische Schulungen und eigenes Branding</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-cyber-green/20 border border-cyber-green/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">Compliance-Reporting</h4>
+                <p class="text-sm text-gray-400">Automatische Berichte und Zertifikate für Audits</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-cyber-green/20 border border-cyber-green/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-white mb-1">Dedicated Support</h4>
+                <p class="text-sm text-gray-400">Persönlicher Ansprechpartner und Onboarding-Unterstützung</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="#" class="btn-pixel inline-flex items-center gap-2 bg-gradient-to-r from-accent-500 to-primary-500 text-white px-8 py-4 rounded-xl text-lg font-semibold">
+            Demo anfordern
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Dashboard mockup -->
+        <div class="relative">
+          <div class="bg-cyber-darker border border-white/10 rounded-2xl overflow-hidden glow-pink">
+            <!-- Dashboard header -->
+            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg"></div>
+                <span class="font-semibold text-white">Organisation Dashboard</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-cyber-green rounded-full"></div>
+                <span class="text-xs text-gray-400">Live</span>
+              </div>
+            </div>
+
+            <!-- Dashboard content -->
+            <div class="p-6 space-y-6">
+              <!-- Stats row -->
+              <div class="grid grid-cols-3 gap-4">
+                <div class="bg-white/5 rounded-xl p-4">
+                  <div class="text-sm text-gray-400 mb-1">Aktive Nutzer</div>
+                  <div class="font-pixel text-2xl text-white">2,847</div>
+                  <div class="text-xs text-cyber-green mt-1">+12% up</div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4">
+                  <div class="text-sm text-gray-400 mb-1">Abschlussrate</div>
+                  <div class="font-pixel text-2xl text-white">94%</div>
+                  <div class="text-xs text-cyber-green mt-1">+3% up</div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4">
+                  <div class="text-sm text-gray-400 mb-1">Zertifikate</div>
+                  <div class="font-pixel text-2xl text-white">1,523</div>
+                  <div class="text-xs text-cyber-green mt-1">+8% up</div>
+                </div>
+              </div>
+
+              <!-- Chart placeholder -->
+              <div class="bg-white/5 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="font-medium text-white">Schulungsfortschritt</span>
+                  <span class="text-xs text-gray-400">Letzte 30 Tage</span>
+                </div>
+                <div class="h-32 flex items-end gap-2">
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[45%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[60%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[40%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[75%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[55%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[85%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-primary-500 to-primary-400 rounded-t h-[70%]"></div>
+                  <div class="flex-1 bg-gradient-to-t from-accent-500 to-accent-400 rounded-t h-[95%]"></div>
+                </div>
+              </div>
+
+              <!-- Team members -->
+              <div class="bg-white/5 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="font-medium text-white">Team-Mitglieder</span>
+                  <span class="text-xs text-primary-400">Alle anzeigen</span>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-primary-500 rounded-full"></div>
+                      <span class="text-sm text-white">Maria S.</span>
+                    </div>
+                    <span class="text-xs text-cyber-green">100%</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-accent-500 rounded-full"></div>
+                      <span class="text-sm text-white">Thomas K.</span>
+                    </div>
+                    <span class="text-xs text-yellow-400">78%</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-cyber-blue rounded-full"></div>
+                      <span class="text-sm text-white">Lisa M.</span>
+                    </div>
+                    <span class="text-xs text-cyber-green">92%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Section -->
+  <section id="app" class="relative space-section-lg py-24 bg-cyber-darker">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Phone mockup -->
+        <div class="order-2 lg:order-1 relative">
+          <div class="relative mx-auto w-full max-w-xs">
+            <!-- Phone frame -->
+            <div class="app-phone-frame bg-gradient-to-br from-gray-700 to-gray-900 rounded-[3rem] p-3 glow-purple animate-float">
+              <div class="app-phone-shell bg-cyber-dark rounded-[2.5rem] overflow-hidden">
+                <!-- App screenshot placeholder -->
+                <div class="app-phone-screen aspect-[9/19] bg-gradient-to-b from-cyber-dark to-cyber-darker p-4 flex flex-col">
+                  <!-- App header -->
+                  <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg"></div>
+                      <span class="font-pixel text-micro text-white">SnappinQuiz</span>
+                    </div>
+                    <div class="w-8 h-8 bg-white/10 rounded-full"></div>
+                  </div>
+
+                  <!-- Daily challenge -->
+                  <div class="bg-gradient-to-r from-primary-500/20 to-accent-500/20 border border-primary-500/30 rounded-2xl p-4 mb-4">
+                    <span class="font-pixel text-micro text-primary-400 block mb-2">TÄGLICHE CHALLENGE</span>
+                    <p class="text-sm text-white mb-3">Erkenne den Phishing-Versuch!</p>
+                    <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                      <div class="h-full w-3/4 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
+                    </div>
+                  </div>
+
+                  <!-- Quick stats -->
+                  <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-white/5 rounded-xl p-3 text-center">
+                      <div class="font-pixel text-lg text-cyber-green">12</div>
+                      <div class="text-caption text-gray-400">Streak</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 text-center">
+                      <div class="font-pixel text-lg text-accent-400">A+</div>
+                      <div class="text-caption text-gray-400">Level</div>
+                    </div>
+                  </div>
+
+                  <!-- Continue learning -->
+                  <div class="flex-1 bg-white/5 rounded-xl p-4">
+                    <span class="text-xs text-gray-400 block mb-3">Weiter lernen</span>
+                    <div class="space-y-3">
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center">
+                          <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                          </svg>
+                        </div>
+                        <div class="flex-1">
+                          <div class="text-xs text-white">Passwort-Sicherheit</div>
+                          <div class="h-1.5 bg-white/10 rounded-full mt-1">
+                            <div class="h-full w-3/5 bg-primary-500 rounded-full"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-accent-500/20 rounded-lg flex items-center justify-center">
+                          <svg class="w-5 h-5 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                          </svg>
+                        </div>
+                        <div class="flex-1">
+                          <div class="text-xs text-white">Email-Betrug</div>
+                          <div class="h-1.5 bg-white/10 rounded-full mt-1">
+                            <div class="h-full w-1/4 bg-accent-500 rounded-full"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom nav -->
+                  <div class="flex items-center justify-around mt-4 pt-4 border-t border-white/10">
+                    <div class="text-center">
+                      <svg class="w-6 h-6 text-primary-400 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                      </svg>
+                    </div>
+                    <div class="text-center">
+                      <svg class="w-6 h-6 text-gray-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                      </svg>
+                    </div>
+                    <div class="text-center">
+                      <svg class="w-6 h-6 text-gray-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating badges -->
+            <div class="absolute -top-2 -left-4 bg-cyber-green/20 border border-cyber-green/50 rounded-lg px-3 py-2 animate-float" style="animation-delay: 0.3s;">
+              <span class="font-pixel text-caption text-cyber-green">iOS + Android</span>
+            </div>
+            <div class="absolute -bottom-2 -right-4 bg-primary-500/20 border border-primary-500/50 rounded-lg px-3 py-2 animate-float" style="animation-delay: 0.7s;">
+              <span class="font-pixel text-caption text-primary-400">4.9 Sterne</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="order-1 lg:order-2">
+          <span class="font-pixel text-sm text-primary-400 mb-4 block space-overline">MOBILE APP</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 space-title">
+            Lernen Sie überall und jederzeit
+          </h2>
+          <p class="text-lg text-gray-400 mb-8 space-lead">
+            Die SnappinQuiz App macht Cybersecurity-Training so einfach wie Ihre Lieblings-App.
+            Kurze Lektionen, die in jeden Alltag passen.
+          </p>
+
+          <!-- App features -->
+          <div class="grid sm:grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">5 Minuten pro Tag</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-accent-500/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Offline-Modus</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-cyber-green/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Push-Erinnerungen</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-cyber-blue/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-cyber-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </div>
+              <span class="text-gray-300">Leaderboards</span>
+            </div>
+          </div>
+
+          <!-- Download buttons -->
+          <div class="flex flex-wrap gap-4">
+            <a href="#" aria-label="Download on the App Store" class="btn-store-badge inline-flex items-center gap-3 bg-black border border-white/20 text-white px-4 py-2.5 rounded-xl min-w-[190px] hover:bg-neutral-900 transition-colors">
+  <svg class="w-7 h-7 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+  </svg>
+  <div class="text-left">
+    <div class="text-xs uppercase tracking-[0.08em] text-gray-300 leading-none">Download on the</div>
+    <div class="text-lg font-semibold leading-tight -mt-0.5">App Store</div>
+  </div>
+</a>
+<a href="#" aria-label="Get it on Google Play" class="btn-store-badge inline-flex items-center gap-3 bg-black border border-white/20 text-white px-4 py-2.5 rounded-xl min-w-[190px] hover:bg-neutral-900 transition-colors">
+  <svg class="w-7 h-7 shrink-0" viewBox="0 0 512 512" aria-hidden="true">
+    <path fill="#00A0FF" d="M60 44c-6 6-10 15-10 27v370c0 12 4 21 10 27l6 6 206-206v-24L66 38l-6 6z"/>
+    <path fill="#FFE000" d="M340 337l-68-69v-24l68-69 83 47c24 13 24 35 0 48l-83 67z"/>
+    <path fill="#FF3A44" d="M340 337l-74-74L60 469c10 10 27 11 46 1l234-133z"/>
+    <path fill="#32A071" d="M340 175L106 42c-19-10-36-9-46 1l206 206 74-74z"/>
+  </svg>
+  <div class="text-left">
+    <div class="text-xs uppercase tracking-[0.08em] text-gray-300 leading-none">Get it on</div>
+    <div class="text-lg font-semibold leading-tight -mt-0.5">Google Play</div>
+  </div>
+</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section id="blog" class="relative space-section-lg py-24 bg-cyber-darker">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 space-header-lg">
+        <span class="font-pixel text-sm text-primary-400 mb-4 block space-overline">BLOG</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 space-title">
+          Aktuelle Artikel
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Neuigkeiten, Tipps und Einblicke rund um Cybersecurity und IT-Sicherheit.
+        </p>
+      </div>
+
+      <div class="content-library-filter-band mb-12">
+        <div class="content-library-filter-shell rounded-2xl p-4 sm:p-6">
+  <div class="flex flex-wrap justify-center gap-2 md:gap-3" role="toolbar" aria-label="Blog">
+    <button type="button" aria-controls="blog-grid" data-blog-filter="all" aria-pressed="true" class="content-library-filter-pill is-active px-4 py-2 rounded-full text-sm font-medium">Alle</button>
+    <button type="button" aria-controls="blog-grid" data-blog-filter="phishing" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">Phishing</button>
+    <button type="button" aria-controls="blog-grid" data-blog-filter="ai" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">KI & Deepfakes</button>
+    <button type="button" aria-controls="blog-grid" data-blog-filter="homeoffice" aria-pressed="false" class="content-library-filter-pill px-4 py-2 rounded-full text-sm font-medium">Home-Office</button>
+  </div>
+  <p data-blog-filter-status class="sr-only" role="status" aria-live="polite"></p>
+</div>
+
+      </div>
+
+      <div id="blog-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite">
+        <!-- Blog post 1 -->
+        <article data-blog-category="phishing" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+          <div data-media-image="blog-phishing-methods" class="content-library-entry-media aspect-video bg-gradient-to-br from-primary-500/20 to-accent-500/20">
+            <div class="absolute top-4 left-4">
+              <span class="content-library-entry-tag bg-primary-500/15 text-primary-300 border border-primary-500/30">Phishing</span>
+            </div>
+          </div>
+          <div class="content-library-entry-content">
+            <div class="content-library-entry-meta text-sm text-gray-400">
+              <span>01/01/2026</span>
+              <span aria-hidden="true">|</span>
+              <span>5 min Lesezeit</span>
+            </div>
+            <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-primary-400 group-focus-within:text-primary-400 transition-colors">
+              <a href="blog/phishing-methods-2026/" class="rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">Die 5 häufigsten Phishing-Methoden 2026</a>
+            </h3>
+            <p class="content-library-entry-description text-sm text-gray-400">
+              Cyberkriminelle werden immer raffinierter. Erfahren Sie, welche neuen Tricks sie verwenden.
+            </p>
+            <div class="content-library-entry-footer">
+              <a href="blog/phishing-methods-2026/" class="inline-flex items-center gap-2 text-sm font-semibold text-primary-300 hover:text-primary-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+                Artikel lesen <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog post 2 -->
+        <article data-blog-category="ai" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+          <div data-media-image="blog-deepfake-guide" class="content-library-entry-media aspect-video bg-gradient-to-br from-accent-500/20 to-cyber-green/20">
+            <div class="absolute top-4 left-4">
+              <span class="content-library-entry-tag bg-accent-500/15 text-accent-300 border border-accent-500/30">KI</span>
+            </div>
+          </div>
+          <div class="content-library-entry-content">
+            <div class="content-library-entry-meta text-sm text-gray-400">
+              <span>01/12/2025</span>
+              <span aria-hidden="true">|</span>
+              <span>8 min Lesezeit</span>
+            </div>
+            <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-accent-400 group-focus-within:text-accent-400 transition-colors">
+              <a href="blog/deepfake-guide/" class="rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400">KI-generierte Deepfakes erkennen</a>
+            </h3>
+            <p class="content-library-entry-description text-sm text-gray-400">
+              Wie Sie sich vor manipulierten Videos und Audio-Fälschungen schützen können.
+            </p>
+            <div class="content-library-entry-footer">
+              <a href="blog/deepfake-guide/" class="inline-flex items-center gap-2 text-sm font-semibold text-accent-300 hover:text-accent-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400">
+                Artikel lesen <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog post 3 -->
+        <article data-blog-category="homeoffice" class="content-library-card card-hover rounded-2xl overflow-hidden group content-library-entry-card">
+          <div data-media-image="blog-home-office-security" class="content-library-entry-media aspect-video bg-gradient-to-br from-cyber-blue/20 to-primary-500/20">
+            <div class="absolute top-4 left-4">
+              <span class="content-library-entry-tag bg-cyber-blue/15 text-cyber-blue border border-cyber-blue/40">Home-Office</span>
+            </div>
+          </div>
+          <div class="content-library-entry-content">
+            <div class="content-library-entry-meta text-sm text-gray-400">
+              <span>01/11/2025</span>
+              <span aria-hidden="true">|</span>
+              <span>6 min Lesezeit</span>
+            </div>
+            <h3 class="content-library-entry-title text-xl font-semibold text-white group-hover:text-cyber-blue group-focus-within:text-cyber-blue transition-colors">
+              <a href="blog/secure-home-office/" class="rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-blue">Sicheres Arbeiten im Home-Office</a>
+            </h3>
+            <p class="content-library-entry-description text-sm text-gray-400">
+              10 essenzielle Tipps für die IT-Sicherheit außerhalb des Büros.
+            </p>
+            <div class="content-library-entry-footer">
+              <a href="blog/secure-home-office/" class="inline-flex items-center gap-2 text-sm font-semibold text-cyber-blue hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-blue">
+                Artikel lesen <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div data-blog-empty-state hidden class="content-library-card content-library-empty-state rounded-2xl p-8 text-center text-base font-medium text-gray-300 mt-6">
+        <p data-filter-empty-message></p>
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="blog/" class="inline-flex items-center gap-2 text-primary-400 font-medium hover:text-primary-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          Alle Artikel anzeigen
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="relative space-section-lg py-24 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-900/50 to-accent-900/50"></div>
+    <div class="absolute inset-0 bg-grid opacity-20"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="font-pixel text-sm text-primary-300 mb-4 block space-overline">BEREIT?</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 space-title">
+        Starten Sie noch heute mit
+        <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">SnappinQuiz</span>
+      </h2>
+      <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+        Kostenlos für Einzelpersonen. Flexible Enterprise-Lösungen für Unternehmen jeder Größe.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="btn-pixel bg-gradient-to-r from-primary-500 to-accent-500 text-white px-8 py-4 rounded-xl text-lg font-semibold animate-pulse-glow inline-flex items-center justify-center gap-2">
+          Kostenlos registrieren
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="#" class="btn-neutral btn-pixel bg-white/5 border border-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white/10 transition-colors inline-flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          Kontakt aufnehmen
+        </a>
+      </div>
+
+      <p class="mt-6 text-sm text-gray-400">
+        Keine Kreditkarte erforderlich • Sofortiger Zugang • Jederzeit kündbar
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-cyber-darker border-t border-white/10 py-16 space-section-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center"><span class="font-pixel text-xs text-white">SQ</span></div>
+          <span class="font-pixel text-sm text-white">SnappinQuiz</span>
+        </a>
+        <p class="text-sm text-gray-400 mb-4">Gamifiziertes Cybersecurity Awareness Training für Einzelpersonen und Unternehmen.</p>
+        <p class="inline-flex items-center gap-1 py-3 text-sm text-gray-400">
+          <span>Ihr Partner:</span>
+          <a href="https://toowoxx.de/" class="inline-flex items-center hover:text-white transition-colors rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" target="_blank" rel="noopener noreferrer" aria-label="Toowoxx (opens in a new tab)">toowoxx.de</a>
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Produkt</h4>
+        <ul class="space-y-2">
+          <li><a href="courses/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kurse</a></li>
+          <li><a href="app/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">SnappinQuiz App</a></li>
+          <li><a href="pricing/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Preise</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Unternehmen</h4>
+        <ul class="space-y-2">
+          <li><a href="about-us/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Über uns</a></li>
+          <li><a href="blog/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Blog</a></li>
+          <li><a href="business/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Rechtliches</h4>
+        <ul class="space-y-2">
+          <li><a href="datenschutzerklarung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Datenschutz</a></li>
+          <li><a href="impressum/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Impressum</a></li>
+          <li><a href="widerrufsbelehrung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Widerrufsbelehrung</a></li>
+          <li><a href="agb/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">AGB</a></li>
+          <li><a href="faq/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">&copy; 2026 SnappinQuiz. Alle Rechte vorbehalten.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+  <!-- JavaScript -->
+  <script src="src/js/main.js"></script>
+</body>
+</html>
+
+

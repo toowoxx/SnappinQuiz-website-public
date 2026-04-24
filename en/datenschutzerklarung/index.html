@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <meta name="description" content="Privacy Policy of Toowoxx IT GmbH.">
+  <title>SnappinQuiz - Privacy Policy</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <script src="src/js/tailwind-font-size-tokens.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87'},
+            accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899'},
+            cyber: {dark:'#0a0a0f',darker:'#050508',purple:'#aa96d2',pink:'#fcd3eb',green:'#00ff88',blue:'#00d4ff'}
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif']
+          },
+          fontSize: window.SNAPPINQUIZ_FONT_SIZE_TOKENS,
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #050508;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+    }
+    .light, [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light .bg-cyber-dark, [data-theme="light"] .bg-cyber-dark { background-color: #ffffff; }
+    .light .bg-cyber-darker, [data-theme="light"] .bg-cyber-darker { background-color: #f9fafb; }
+    .light .bg-white\/5, [data-theme="light"] .bg-white\/5 { background-color: rgba(0,0,0,0.03); }
+    .light .border-white\/10, [data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.1); }
+    .light .text-white, [data-theme="light"] .text-white { color: var(--text-primary); }
+    .light .text-gray-300, [data-theme="light"] .text-gray-300 { color: var(--text-secondary); }
+    .light .text-gray-400, [data-theme="light"] .text-gray-400 { color: var(--text-secondary); }
+    .light .nav-blur, [data-theme="light"] .nav-blur { background-color: rgba(255,255,255,0.9); }
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .scanline {
+      background: linear-gradient(transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .nav-link-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .nav-login-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 64px;
+      white-space: nowrap;
+    }
+    .nav-lang-fixed {
+      width: 72px;
+      justify-content: center;
+    }
+  </style>
+  <link rel="stylesheet" href="src/css/spacing.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-sans antialiased">
+  <div class="fixed inset-0 scanline z-50 pointer-events-none"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-40 nav-blur bg-cyber-dark/80 border-b border-primary-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <span class="font-pixel text-xs text-white">SQ</span>
+          </div>
+          <span class="font-pixel text-xs sm:text-sm text-white group-hover:text-primary-400 transition-colors">SnappinQuiz</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="courses/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.courses">Courses</a>
+          <a href="business/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.business">Business</a>
+          <a href="app/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.app">SnappinQuiz App</a>
+          <a href="blog/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.blog">Blog</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+  <div class="relative" data-settings-dropdown-menu>
+    <button type="button" data-settings-dropdown-trigger aria-labelledby="settings-trigger-label" aria-expanded="false" class="btn-neutral inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.88 2h-3.76a.5.5 0 00-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.73 8.48a.5.5 0 00.12.64l2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.69.22l2.39-.96c.5.4 1.05.72 1.63.95l.36 2.53c.03.25.24.43.49.43h3.76c.25 0 .46-.18.49-.43l.36-2.53c.58-.23 1.13-.55 1.63-.95l2.39.96c.26.12.55.02.69-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"></path>
+      </svg>
+      <span id="settings-trigger-label" class="sr-only" data-i18n="profil-einstellungen">Profile settings</span>
+    </button>
+    <div data-settings-dropdown class="hidden absolute right-0 z-50 mt-2 w-[calc(100vw-1rem)] sm:w-80 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/settings/" data-auth-settings class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="alle einstellungen">All settings</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" data-theme-toggle aria-pressed="false" class="flex w-full items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="nav.theme">Theme</span>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+          <span data-theme-current-label aria-live="polite">Dark mode</span>
+          <span data-theme-switch-track class="relative inline-flex h-6 w-12 items-center rounded-full border border-white/20 bg-white/10 p-0.5 transition-colors duration-200" aria-hidden="true">
+            <svg data-theme-switch-icon="light" class="absolute left-1 h-3 w-3 text-yellow-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M7 0h2v2H7zM7 14h2v2H7zM0 7h2v2H0zM14 7h2v2h-2zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2zM6 5h4v1h1v4h-1v1H6v-1H5V6h1z"/>
+            </svg>
+            <svg data-theme-switch-icon="dark" class="absolute right-1 h-3 w-3 text-primary-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M10.6 1.4A6.4 6.4 0 1014.6 13a5.4 5.4 0 11-4-11.6z"/>
+            </svg>
+            <span data-theme-switch-thumb class="inline-block h-5 w-5 rounded-full bg-white/90 shadow transition-transform duration-200"></span>
+          </span>
+        </span>
+      </button>
+      <details data-settings-menu="language" class="rounded-lg">
+        <summary data-lang-toggle data-settings-trigger class="flex w-full cursor-pointer list-none items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          <span data-i18n="nav.language">Language</span>
+          <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+            <span data-lang-indicator>German</span>
+            <svg data-setting-chevron class="h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        </summary>
+        <div class="mt-2 grid gap-2 pl-2" data-language-options>
+          <button type="button" data-lang-option="de" data-option-key="deutsch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>German</span>
+          </button>
+          <button type="button" data-lang-option="en" data-option-key="englisch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>English</span>
+          </button>
+        </div>
+      </details>
+    </div>
+  </div>
+  <a href="profile-mockup/login/" data-auth-login class="btn-neutral inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-i18n="nav.login">Login</a>
+  <a href="profile-mockup/signup/" data-auth-signup class="inline-flex min-h-[44px] items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 active:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300" data-i18n="nav.signup">Sign up</a>
+  <div class="relative hidden" data-profile-menu data-auth-profile-menu>
+    <button type="button" data-profile-trigger aria-expanded="false" class="inline-flex min-h-[44px] items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-gray-200">
+      <span data-profile-trigger-avatar role="img" aria-label="Profilbild" class="inline-flex h-4 w-4 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/10 bg-cover bg-center text-[0.55rem] font-semibold leading-none text-gray-100">
+        <span data-profile-trigger-avatar-initials aria-hidden="true">DU</span>
+      </span>
+      <span data-i18n="nav.profile">Profile</span>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </button>
+    <div data-profile-dropdown class="hidden absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/profile/" data-auth-profile class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 hover:text-primary-300 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="mein profil">My Profile</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/organisation/" data-auth-owner class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="organisation-dashboard">Organisation Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/admin/" data-auth-admin class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="admin-dashboard">Admin Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/teamleader/" data-auth-teamleader class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="teamleader-dashboard">Team Leader Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="h-px bg-white/10" aria-hidden="true"></div>
+      <button type="button" data-auth-logout class="hidden block w-full min-h-[44px] rounded-lg text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300" data-i18n="nav.logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-300 hover:text-white" aria-label="Open mobile menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-primary-500/20" style="background-color: var(--bg-secondary);">
+      <div class="px-4 py-4 space-y-3">
+        <a href="courses/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.courses">Courses</a>
+        <a href="business/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.business">Business</a>
+        <a href="app/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.app">SnappinQuiz App</a>
+        <a href="blog/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.blog">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="relative space-section-hero pt-32 pb-16">
+  <div class="absolute inset-0 bg-grid opacity-50"></div>
+  <div class="absolute top-1/4 -left-32 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 -right-32 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <span class="font-pixel text-sm text-primary-400 mb-4 block space-overline uppercase">Legal</span>
+    <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4 space-title">Privacy Policy</h1>
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto">Data Protection at a Glance</p>
+    
+  </div>
+</section>
+
+
+    <section class="relative space-section-md bg-cyber-darker border-y border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <article class="bg-white/5 border border-white/10 rounded-2xl p-8 sm:p-10 space-stack-md text-gray-300 leading-relaxed">
+          <h2 class="text-2xl font-semibold text-white">1. Data Protection at a Glance</h2>
+
+          <h3 class="text-xl font-semibold text-white">General Information</h3>
+          <p>The following information provides a simple overview of what happens to your personal data when you visit this website. Personal data is any data that can be used to personally identify you. Detailed information on data protection can be found in this privacy policy.</p>
+
+          <h3 class="text-xl font-semibold text-white">Data Collection on This Website</h3>
+          <h4 class="text-lg font-semibold text-white">Who is responsible for data collection on this website?</h4>
+          <p>Data processing on this website is carried out by the website operator. You can find the operator's contact details in the legal notice of this website.</p>
+
+          <h4 class="text-lg font-semibold text-white">How do we collect your data?</h4>
+          <p>Your data is collected, on the one hand, when you provide it to us. This may include, for example, data that you enter into a contact form.</p>
+          <p>Other data is collected automatically by our IT systems when you visit the website, or after your consent has been given. This mainly includes technical data (for example, internet browser, operating system, or the time of page access). This data is collected automatically as soon as you enter this website.</p>
+
+          <h4 class="text-lg font-semibold text-white">What do we use your data for?</h4>
+          <p>Some data is collected to ensure error-free delivery of the website. Other data may be used to analyze your user behavior.</p>
+
+          <h4 class="text-lg font-semibold text-white">What rights do you have regarding your data?</h4>
+          <p>You have the right at any time to receive free information about the origin, recipients, and purpose of your stored personal data. You also have the right to request correction or deletion of this data. If you have given consent to data processing, you can withdraw this consent at any time with future effect.</p>
+          <p>You also have the right, under certain circumstances, to request restriction of the processing of your personal data. Furthermore, you have the right to lodge a complaint with the competent supervisory authority.</p>
+          <p>You can contact us at any time regarding this and any other questions on data protection.</p>
+
+          <h4 class="text-lg font-semibold text-white">Analytics tools and third-party tools</h4>
+          <p>When visiting this website, your browsing behavior can be statistically evaluated. This is done primarily using analytics programs.</p>
+          <p>Detailed information on these analytics programs can be found in the privacy policy below.</p>
+
+          <h2 class="text-2xl font-semibold text-white">2. Hosting</h2>
+          <p>We host the content of our website with the following provider:</p>
+
+          <h3 class="text-xl font-semibold text-white">DomainFactory</h3>
+          <p>The provider is DomainFactory GmbH, c/o WeWork, Neuturmstrasse 5, 80331 Munich (hereinafter DomainFactory). When you visit our website, DomainFactory collects various log files including your IP addresses.</p>
+          <p>For details, please refer to DomainFactory's privacy policy: <a class="text-primary-300 hover:text-primary-200 underline" href="https://www.df.eu/de/datenschutz/" target="_blank" rel="noopener noreferrer">https://www.df.eu/de/datenschutz/</a>.</p>
+          <p>Die Verwendung von DomainFactory erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Wir haben ein berechtigtes Interesse an einer möglichst zuverlässigen Darstellung unserer Website. Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TTDSG. Die Einwilligung ist jederzeit widerrufbar.</p>
+
+          <h3 class="text-xl font-semibold text-white">Data Processing Agreement</h3>
+          <p>We have concluded a data processing agreement (DPA) for the use of the service mentioned above. This is a contract required under data protection law and ensures that personal data of our website visitors is processed only according to our instructions and in compliance with the GDPR.</p>
+
+          <h2 class="text-2xl font-semibold text-white">3. General Information and Mandatory Information</h2>
+
+          <h3 class="text-xl font-semibold text-white">Privacy Policy</h3>
+          <p>The operators of this website take the protection of your personal data very seriously. We treat your personal data confidentially and in accordance with statutory data protection regulations and this privacy policy.</p>
+          <p>When you use this website, various personal data is collected. This privacy policy explains which data we collect, what we use it for, and how and for what purpose this is done.</p>
+          <p>Please note that data transmission over the internet (for example, communication by email) may have security gaps. Complete protection of data against access by third parties is not possible.</p>
+
+          <h3 class="text-xl font-semibold text-white">Information about the controller</h3>
+          <p>The controller responsible for data processing on this website is:</p>
+          <p>Toowoxx IT GmbH<br>Christian Thoma, JÃ¼rgen Mayer, Oliver Wiemer<br>Krumbacher Str. 1<br>86489 Deisenhausen<br>Germany</p>
+          <p>The controller is the natural or legal person who alone or jointly with others determines the purposes and means of processing personal data.</p>
+
+          <h3 class="text-xl font-semibold text-white">Storage period</h3>
+          <p>Unless a more specific storage period is stated in this privacy policy, your personal data will remain with us until the purpose of data processing no longer applies. If you submit a legitimate request for deletion or withdraw your consent to data processing, your data will be deleted unless we have other legally permissible reasons for storing your personal data.</p>
+
+          <h3 class="text-xl font-semibold text-white">General information on the legal basis for data processing on this website</h3>
+          <p>If you have consented to data processing, we process your personal data on the basis of Art. 6(1)(a) GDPR or Art. 9(2)(a) GDPR. In the case of explicit consent for transfer of personal data to third countries, data processing is also carried out on the basis of Art. 49(1)(a) GDPR.</p>
+          <p>Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TTDSG. Die Einwilligung ist jederzeit widerrufbar.</p>
+          <p>If your data is required for contract fulfillment or pre-contractual measures, we process your data on the basis of Art. 6(1)(b) GDPR. We also process your data on the basis of Art. 6(1)(c) GDPR if there is a legal obligation. Data processing may also be carried out on the basis of our legitimate interest under Art. 6(1)(f) GDPR.</p>
+
+          <h3 class="text-xl font-semibold text-white">Recipients of personal data</h3>
+          <p>As part of our business operations, we work with various external parties. In some cases, it is necessary to transfer personal data to these external parties. We only pass on personal data to external parties if this is required for contract fulfillment, if we are legally obliged to do so, if we have a legitimate interest in disclosure under Art. 6(1)(f) GDPR, or if another legal basis permits the disclosure.</p>
+          <p>When using processors, we pass on personal data of our customers only on the basis of a valid data processing agreement. In the case of joint processing, a joint processing agreement is concluded.</p>
+
+          <h3 class="text-xl font-semibold text-white">Withdrawal of your consent to data processing</h3>
+          <p>Many data processing operations are only possible with your explicit consent. You can withdraw consent already given at any time. The legality of data processing carried out before withdrawal remains unaffected.</p>
+
+          <h3 class="text-xl font-semibold text-white">Right to object to data collection in special cases and to direct advertising (Art. 21 GDPR)</h3>
+          <p>If data processing is carried out on the basis of Art. 6(1)(e) or (f) GDPR, you have the right at any time to object to the processing of your personal data on grounds relating to your particular situation. This also applies to profiling based on these provisions.</p>
+          <p>If your personal data is processed for direct advertising, you have the right to object at any time to the processing of personal data concerning you for such advertising purposes. This also applies to profiling insofar as it is associated with such direct advertising.</p>
+
+          <h3 class="text-xl font-semibold text-white">Right to lodge a complaint with the competent supervisory authority</h3>
+          <p>In the event of infringements of the GDPR, data subjects have the right to lodge a complaint with a supervisory authority, in particular in the member state of their habitual residence, place of work, or place of the alleged infringement.</p>
+
+          <h3 class="text-xl font-semibold text-white">Right to data portability</h3>
+          <p>You have the right to receive data that we process automatically on the basis of your consent or in fulfillment of a contract, either for yourself or for a third party, in a common, machine-readable format. If you request direct transfer to another controller, this will only be done where technically feasible.</p>
+
+          <h3 class="text-xl font-semibold text-white">Information, correction and deletion</h3>
+          <p>Within the framework of applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipients, and the purpose of data processing, and, where applicable, a right to correction or deletion of this data.</p>
+
+          <h3 class="text-xl font-semibold text-white">Right to restriction of processing</h3>
+          <p>You have the right to request restriction of the processing of your personal data. You can contact us at any time regarding this. The right to restriction of processing exists in the following cases:</p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>If you contest the accuracy of your personal data stored by us, we usually need time to verify this. For the duration of the review, you have the right to request restriction of processing of your personal data.</li>
+            <li>If the processing of your personal data was/is unlawful, you may request restriction of data processing instead of deletion.</li>
+            <li>If we no longer need your personal data, but you need it for the exercise, defense, or assertion of legal claims, you have the right to request restriction of processing instead of deletion.</li>
+            <li>If you have lodged an objection pursuant to Art. 21(1) GDPR, a balancing of your interests and ours must be carried out. As long as it is not yet clear whose interests prevail, you have the right to request restriction of processing of your personal data.</li>
+          </ul>
+          <p>If you have restricted processing of your personal data, this data may - apart from storage - only be processed with your consent or for the assertion, exercise, or defense of legal claims, or for the protection of the rights of another natural or legal person, or for reasons of important public interest of the European Union or a member state.</p>
+
+          <h3 class="text-xl font-semibold text-white">SSL/TLS encryption</h3>
+          <p>For security reasons and to protect the transmission of confidential content, such as orders or inquiries that you send to us as the website operator, this website uses SSL or TLS encryption.</p>
+          <p>You can recognize an encrypted connection by the browser address line changing from "http://" to "https://" and by the lock symbol in your browser bar.</p>
+
+          <h2 class="text-2xl font-semibold text-white">4. Data Collection on This Website</h2>
+
+          <h3 class="text-xl font-semibold text-white">Cookies</h3>
+          <p>Our web pages use so-called "cookies". Cookies are small data packets and do not cause any damage to your device. They are stored either temporarily for the duration of a session or permanently on your device.</p>
+          <p>Cookies required to carry out the electronic communication process, to provide certain functions you requested, or to optimize the website (necessary cookies) are stored on the basis of Art. 6(1)(f) GDPR.</p>
+          <p>If consent has been requested for the storage of cookies and comparable recognition technologies, processing is carried out exclusively on the basis of this consent. Consent can be withdrawn at any time.</p>
+          <p>You can configure your browser so that you are informed about the setting of cookies and allow cookies only in individual cases, reject cookies for specific cases or in general, and activate automatic deletion of cookies when closing the browser.</p>
+          <p>If cookies are disabled, the functionality of this website may be limited.</p>
+
+          <h3 class="text-xl font-semibold text-white">Contact form</h3>
+          <p>If you send us inquiries via the contact form, your information from the inquiry form, including the contact details you provide there, will be stored by us for the purpose of processing the inquiry and in case of follow-up questions.</p>
+          <p>This data is processed on the basis of Art. 6(1)(b) GDPR if your inquiry is related to contract fulfillment or is required for pre-contractual measures. In all other cases, processing is based on our legitimate interest in effectively handling inquiries addressed to us.</p>
+          <p>The data you enter in the contact form remains with us until you request deletion, withdraw your consent to storage, or the purpose for data storage no longer applies.</p>
+
+          <h3 class="text-xl font-semibold text-white">Inquiries by email, telephone or fax</h3>
+          <p>If you contact us by email, telephone, or fax, your inquiry including all resulting personal data will be stored and processed by us for the purpose of handling your request.</p>
+          <p>We do not pass on this data without your consent.</p>
+          <p>The data you send to us through contact inquiries remains with us until you request deletion, withdraw your consent, or the purpose for data storage no longer applies.</p>
+
+          <h2 class="text-2xl font-semibold text-white">5. Plugins and Tools</h2>
+
+          <h3 class="text-xl font-semibold text-white">Google Fonts</h3>
+          <p>This website uses Google Fonts for the uniform display of fonts, provided by Google. When you open a page, your browser loads the required fonts into its browser cache to display text and fonts correctly.</p>
+          <p>For this purpose, the browser you use must connect to Google's servers. As a result, Google learns that this website was accessed via your IP address.</p>
+          <p>More information on Google Fonts can be found at <a class="text-primary-300 hover:text-primary-200 underline" href="https://developers.google.com/fonts/faq" target="_blank" rel="noopener noreferrer">https://developers.google.com/fonts/faq</a> and in Google's privacy policy: <a class="text-primary-300 hover:text-primary-200 underline" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a>.</p>
+          <p>Die Nutzung von Google Fonts erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TTDSG. Die Einwilligung ist jederzeit widerrufbar.</p>
+          <p>The company is certified under the "EU-US Data Privacy Framework" (DPF). More information is available at: <a class="text-primary-300 hover:text-primary-200 underline" href="https://www.dataprivacyframework.gov/participant/5780" target="_blank" rel="noopener noreferrer">https://www.dataprivacyframework.gov/participant/5780</a>.</p>
+
+          <h3 class="text-xl font-semibold text-white">Google reCAPTCHA</h3>
+          <p>We use "Google reCAPTCHA" on this website. The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland.</p>
+          <p>reCAPTCHA is used to check whether data entered on this website (for example in a contact form) is entered by a human or by an automated program. For this purpose, reCAPTCHA analyzes website visitor behavior based on various characteristics.</p>
+          <p>Data analysis begins automatically as soon as the website visitor enters the site. For analysis, reCAPTCHA evaluates various information (for example IP address, time spent on the website, or mouse movements made by the user).</p>
+          <p>The data collected during analysis is forwarded to Google.</p>
+          <p>Further information on Google reCAPTCHA can be found in Google's privacy policy and terms of use at the following links: <a class="text-primary-300 hover:text-primary-200 underline" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a>, <a class="text-primary-300 hover:text-primary-200 underline" href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">https://policies.google.com/terms</a>.</p>
+          <p>Die Nutzung von Google reCAPTCHA erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TTDSG. Die Einwilligung ist jederzeit widerrufbar.</p>
+          <p>The company is certified under the "EU-US Data Privacy Framework" (DPF). More information is available at: <a class="text-primary-300 hover:text-primary-200 underline" href="https://www.dataprivacyframework.gov/participant/5780" target="_blank" rel="noopener noreferrer">https://www.dataprivacyframework.gov/participant/5780</a>.</p>
+
+          <p><strong class="text-white">Quelle:</strong> <a class="text-primary-300 hover:text-primary-200 underline" href="https://www.e-recht24.de" target="_blank" rel="noopener noreferrer">https://www.e-recht24.de</a></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-cyber-darker border-t border-white/10 py-16 space-section-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center"><span class="font-pixel text-xs text-white">SQ</span></div>
+          <span class="font-pixel text-sm text-white">SnappinQuiz</span>
+        </a>
+        <p class="text-sm text-gray-400 mb-4">Gamified cybersecurity awareness training for individuals and businesses.</p>
+        <p class="inline-flex items-center gap-1 py-3 text-sm text-gray-400">
+          <span>Your partner:</span>
+          <a href="https://toowoxx.de/" class="inline-flex items-center hover:text-white transition-colors rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" target="_blank" rel="noopener noreferrer" aria-label="Toowoxx (opens in a new tab)">toowoxx.de</a>
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Product</h4>
+        <ul class="space-y-2">
+          <li><a href="courses/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Courses</a></li>
+          <li><a href="app/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">SnappinQuiz App</a></li>
+          <li><a href="pricing/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Company</h4>
+        <ul class="space-y-2">
+          <li><a href="about-us/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">About Us</a></li>
+          <li><a href="blog/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Blog</a></li>
+          <li><a href="business/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Legal</h4>
+        <ul class="space-y-2">
+          <li><a href="datenschutzerklarung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Privacy Policy</a></li>
+          <li><a href="impressum/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Imprint</a></li>
+          <li><a href="widerrufsbelehrung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Cancellation Policy</a></li>
+          <li><a href="agb/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Terms and Conditions</a></li>
+          <li><a href="faq/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">Â© 2026 SnappinQuiz. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+  <script src="src/js/main.js"></script>
+</body>
+</html>
+

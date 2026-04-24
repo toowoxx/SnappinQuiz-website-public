@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SnappinQuiz - Profile Mockup</title>
+  <link rel="canonical" href="login/">
+  <noscript><meta http-equiv="refresh" content="0; url=login/"></noscript>
+</head>
+<body>
+  <p>Redirecting to <a href="login/">Login</a> ...</p>
+  <script>
+    (function redirectToScreen() {
+      const params = new URLSearchParams(window.location.search || "");
+      const view = params.get("view");
+      const target = view === "signup" || view === "profile" || view === "organisation" || view === "admin" || view === "teamleader" || view === "settings" || view === "login" ? `${view}/` : "login/";
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>

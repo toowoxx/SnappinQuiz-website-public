@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../../../">
+  <meta name="description" content="SnappinQuiz Kursbibliothek - Interaktive Cybersecurity Kurse für Teams und Einzelpersonen.">
+  <title>SnappinQuiz - Quiz abgeschlossen</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <script src="src/js/tailwind-font-size-tokens.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87'},
+            accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899'},
+            cyber: {dark:'#0a0a0f',darker:'#050508',purple:'#aa96d2',pink:'#fcd3eb',green:'#00ff88',blue:'#00d4ff'}
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif']
+          },
+          fontSize: window.SNAPPINQUIZ_FONT_SIZE_TOKENS,
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #050508;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+    }
+    .light, [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light .bg-cyber-dark, [data-theme="light"] .bg-cyber-dark { background-color: #ffffff; }
+    .light .bg-cyber-darker, [data-theme="light"] .bg-cyber-darker { background-color: #f9fafb; }
+    .light .bg-white\/5, [data-theme="light"] .bg-white\/5 { background-color: rgba(0,0,0,0.03); }
+    .light .border-white\/10, [data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.1); }
+    .light .text-white, [data-theme="light"] .text-white { color: var(--text-primary); }
+    .light .text-gray-300, [data-theme="light"] .text-gray-300 { color: var(--text-secondary); }
+    .light .text-gray-400, [data-theme="light"] .text-gray-400 { color: var(--text-secondary); }
+    .light .nav-blur, [data-theme="light"] .nav-blur { background-color: rgba(255,255,255,0.9); }
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .scanline {
+      background: linear-gradient(transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding-top: env(safe-area-inset-top, 0px); }
+    .nav-link-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .nav-login-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 64px;
+      white-space: nowrap;
+    }
+    .nav-lang-fixed {
+      width: 72px;
+      justify-content: center;
+    }
+    .profile-fancy-panel {
+      border: 1px solid rgba(192, 132, 252, 0.28);
+      background: linear-gradient(150deg, rgba(168, 85, 247, 0.18) 0%, rgba(10, 10, 15, 0.78) 45%, rgba(244, 114, 182, 0.16) 100%);
+      box-shadow: 0 20px 50px rgba(88, 28, 135, 0.22);
+    }
+    .profile-box-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-box-shimmer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.4) 25%, rgba(236,72,153,0.4) 50%, rgba(168,85,247,0.4) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer-border 4s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .profile-box-shimmer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 30px;
+      animation: scan-line 6s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer-border {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes scan-line {
+      0% { background-position: 0 -100%; }
+      100% { background-position: 0 200%; }
+    }
+    @keyframes avatar-ring-pulse {
+      0%, 100% { border-color: rgba(192,132,252,0.6); box-shadow: 0 0 15px rgba(168,85,247,0.25); }
+      50% { border-color: rgba(244,114,182,0.6); box-shadow: 0 0 25px rgba(236,72,153,0.3); }
+    }
+    @keyframes sparkle-pixel {
+      0%, 100% { opacity: 0; }
+      15%, 85% { opacity: 0; }
+      25% { opacity: 1; box-shadow: 5px 0 0 rgba(236,72,153,0.5), 0 5px 0 rgba(168,85,247,0.4), -5px 0 0 rgba(192,132,252,0.3); }
+      50% { opacity: 1; box-shadow: 0 -5px 0 rgba(236,72,153,0.5), 5px 5px 0 rgba(168,85,247,0.4), -5px 5px 0 rgba(192,132,252,0.3); }
+      75% { opacity: 1; box-shadow: -5px 0 0 rgba(236,72,153,0.5), 5px 0 0 rgba(168,85,247,0.4), 0 -5px 0 rgba(192,132,252,0.3); }
+    }
+    @keyframes progress-glow {
+      0%, 100% { box-shadow: 0 0 6px rgba(168,85,247,0.3); }
+      50% { box-shadow: 0 0 14px rgba(168,85,247,0.6); }
+    }
+    .profile-avatar-ring {
+      animation: avatar-ring-pulse 3s ease-in-out infinite;
+    }
+    .profile-sparkle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 0;
+      background: rgba(168,85,247,0.7);
+      box-shadow: 5px 0 0 rgba(236,72,153,0.5), 0 5px 0 rgba(168,85,247,0.4), -5px 0 0 rgba(192,132,252,0.3);
+      animation: sparkle-pixel 3s steps(1) infinite;
+      pointer-events: none;
+      image-rendering: pixelated;
+    }
+    @keyframes levelup-flash {
+      0% { opacity: 0; }
+      30% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .profile-xp-glow {
+      text-shadow: 0 0 8px rgba(168,85,247,0.5);
+    }
+    .profile-progress-glow {
+      animation: progress-glow 2s ease-in-out infinite;
+    }
+    .score-ring-tooltip {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 1000;
+      background: #1e1a2e;
+      border: 0.5px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 10px 14px;
+      min-width: 180px;
+      transform: translate(10px, -50%);
+      color: #fff;
+      font-size: 12px;
+    }
+    .score-ring-tooltip.visible { opacity: 1; }
+    .score-ring-tooltip-bar { height: 2px; border-radius: 99px; margin-bottom: 8px; }
+    .score-ring-tooltip-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .score-ring-tooltip-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .score-ring-tooltip-row + .score-ring-tooltip-row { margin-top: 6px; }
+    .score-ring-tooltip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .score-ring-tooltip-label { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.6); }
+    .score-ring-tooltip-value { font-family: "JetBrains Mono", monospace; }
+    .score-ring-dot-glow { box-shadow: 0 0 0 4px rgba(248,113,113,0.25); border-radius: 50%; }
+  </style>
+  <link rel="stylesheet" href="src/css/spacing.css">
+  <link rel="stylesheet" href="src/css/content-library.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-sans antialiased">
+  <div class="fixed inset-0 scanline z-50 pointer-events-none"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-40 nav-blur bg-cyber-dark/80 border-b border-primary-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <span class="font-pixel text-xs text-white">SQ</span>
+          </div>
+          <span class="font-pixel text-xs sm:text-sm text-white group-hover:text-primary-400 transition-colors">SnappinQuiz</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="courses/" class="nav-link-fixed text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.courses">Kurse</a>
+          <a href="business/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.business">Business</a>
+          <a href="app/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.app">SnappinQuiz App</a>
+          <a href="blog/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.blog">Blog</a>
+        </div>
+
+                <div class="flex items-center gap-2">
+  <div class="relative" data-settings-dropdown-menu>
+    <button type="button" data-settings-dropdown-trigger aria-labelledby="settings-trigger-label" aria-expanded="false" class="btn-neutral inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.88 2h-3.76a.5.5 0 00-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.73 8.48a.5.5 0 00.12.64l2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.69.22l2.39-.96c.5.4 1.05.72 1.63.95l.36 2.53c.03.25.24.43.49.43h3.76c.25 0 .46-.18.49-.43l.36-2.53c.58-.23 1.13-.55 1.63-.95l2.39.96c.26.12.55.02.69-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"></path>
+      </svg>
+      <span id="settings-trigger-label" class="sr-only" data-i18n="profil-einstellungen">Profil-Einstellungen</span>
+    </button>
+    <div data-settings-dropdown class="hidden absolute right-0 z-50 mt-2 w-[calc(100vw-1rem)] sm:w-80 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/settings/" data-auth-settings class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="alle einstellungen">Alle Einstellungen</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" data-theme-toggle aria-pressed="false" class="flex w-full items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="nav.theme">Theme</span>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+          <span data-theme-current-label aria-live="polite">Dunkelmodus</span>
+          <span data-theme-switch-track class="relative inline-flex h-6 w-12 items-center rounded-full border border-white/20 bg-white/10 p-0.5 transition-colors duration-200" aria-hidden="true">
+            <svg data-theme-switch-icon="light" class="absolute left-1 h-3 w-3 text-yellow-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M7 0h2v2H7zM7 14h2v2H7zM0 7h2v2H0zM14 7h2v2h-2zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2zM6 5h4v1h1v4h-1v1H6v-1H5V6h1z"/>
+            </svg>
+            <svg data-theme-switch-icon="dark" class="absolute right-1 h-3 w-3 text-primary-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M10.6 1.4A6.4 6.4 0 1014.6 13a5.4 5.4 0 11-4-11.6z"/>
+            </svg>
+            <span data-theme-switch-thumb class="inline-block h-5 w-5 rounded-full bg-white/90 shadow transition-transform duration-200"></span>
+          </span>
+        </span>
+      </button>
+      <details data-settings-menu="language" class="rounded-lg">
+        <summary data-lang-toggle data-settings-trigger class="flex w-full cursor-pointer list-none items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          <span data-i18n="nav.language">Language</span>
+          <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+            <span data-lang-indicator>Deutsch</span>
+            <svg data-setting-chevron class="h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        </summary>
+        <div class="mt-2 grid gap-2 pl-2" data-language-options>
+          <button type="button" data-lang-option="de" data-option-key="deutsch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>Deutsch</span>
+          </button>
+          <button type="button" data-lang-option="en" data-option-key="englisch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>English</span>
+          </button>
+        </div>
+      </details>
+    </div>
+  </div>
+  <a href="profile-mockup/login/" data-auth-login class="btn-neutral inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-i18n="nav.login">Login</a>
+  <a href="profile-mockup/signup/" data-auth-signup class="inline-flex min-h-[44px] items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 active:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300" data-i18n="nav.signup">Sign up</a>
+  <div class="relative hidden" data-profile-menu data-auth-profile-menu>
+    <button type="button" data-profile-trigger aria-expanded="false" class="inline-flex min-h-[44px] items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-gray-200">
+      <span data-profile-trigger-avatar role="img" aria-label="Profilbild" class="inline-flex h-4 w-4 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/10 bg-cover bg-center text-[0.55rem] font-semibold leading-none text-gray-100">
+        <span data-profile-trigger-avatar-initials aria-hidden="true">DU</span>
+      </span>
+      <span data-i18n="nav.profile">Profil</span>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </button>
+    <div data-profile-dropdown class="hidden absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/profile/" data-auth-profile class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 hover:text-primary-300 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="mein profil">Mein Profil</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/organisation/" data-auth-owner class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="organisation-dashboard">Organisation-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/admin/" data-auth-admin class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="admin-dashboard">Admin-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/teamleader/" data-auth-teamleader class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="teamleader-dashboard">Teamleader-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="h-px bg-white/10" aria-hidden="true"></div>
+      <button type="button" data-auth-logout class="hidden block w-full min-h-[44px] rounded-lg text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300" data-i18n="nav.logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-300 hover:text-white" aria-label="Open mobile menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-primary-500/20" style="background-color: var(--bg-secondary);">
+      <div class="px-4 py-4 space-y-3">
+        <a href="courses/" class="block text-primary-400 py-2" data-i18n="nav.courses">Kurse</a>
+        <a href="business/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.business">Business</a>
+        <a href="app/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.app">SnappinQuiz App</a>
+        <a href="blog/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.blog">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main data-course-quiz-review-page class="content-library-page">
+    <section class="relative space-section-hero pt-32 pb-16">
+  <div class="absolute inset-0 bg-grid opacity-50"></div>
+  <div class="absolute top-1/4 -left-32 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 -right-32 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <span class="font-pixel text-sm text-primary-400 mb-4 block space-overline uppercase">QUIZ</span>
+    <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4 space-title" data-course-quiz-review-title>Quiz abgeschlossen</h1>
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto" data-course-quiz-review-hint>Dein Quizbericht mit Auswertung und Belohnungen.</p>
+    
+  </div>
+</section>
+
+
+    <section class="relative space-section-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <article class="profile-fancy-panel rounded-3xl p-6 md:p-8 lg:p-10 space-y-7" data-course-quiz-review-card>
+          <section
+            data-course-quiz-review-gamification-panel
+            class="profile-box-shimmer rounded-2xl border border-primary-400/35 bg-gradient-to-br from-primary-500/20 via-cyber-dark/60 to-accent-500/20 p-5 sm:p-6 space-y-5 shadow-lg shadow-primary-500/10"
+            aria-label=""
+          >
+
+            <div class="flex items-center gap-5">
+              <div class="relative shrink-0">
+                <div class="profile-pulse-dot absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-cyber-green z-10" aria-hidden="true"></div>
+                <div class="absolute inset-0 -m-2 rounded-full bg-primary-500/20 blur-xl" aria-hidden="true"></div>
+                <div data-course-quiz-review-avatar class="profile-avatar-ring relative flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-primary-400/60 bg-gradient-to-br from-primary-400/30 to-accent-400/30">
+                  <span data-course-quiz-review-avatar-initials class="font-pixel text-sm text-white">SQ</span>
+                </div>
+              </div>
+              <div class="min-w-0 flex-1 space-y-2">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <div class="min-w-0">
+                    <p data-course-quiz-review-profile-label class="text-xs uppercase tracking-wide text-gray-400">Spielerprofil</p>
+                    <p data-course-quiz-review-player-name class="truncate text-lg font-bold font-pixel text-white">SnappinQuiz Player</p>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs">
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-400/40 bg-primary-500/20 px-3 py-1.5 text-primary-100">
+                      <span class="font-pixel text-[0.6rem] uppercase tracking-wide" data-course-quiz-review-level-label>Level</span>
+                      <strong data-course-quiz-review-level-value class="font-semibold profile-xp-glow">01</strong>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-primary-400/40 bg-primary-500/20 px-3 py-1.5 text-primary-100">
+                      <span class="font-pixel text-[0.6rem] uppercase tracking-wide">RANG</span>
+                      <strong data-course-quiz-review-rank-value class="font-semibold profile-xp-glow">Rookie</strong>
+                    </span>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-300">
+                  Gesamt-XP:
+                  <strong data-course-quiz-review-xp-total-value class="text-primary-200 profile-xp-glow">0 XP</strong>
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-3 text-xs text-gray-300">
+                <span data-course-quiz-review-level-progress-label>0 / 0 XP</span>
+              </div>
+              <div
+                data-course-quiz-review-level-progress-bar
+                class="h-3 overflow-hidden rounded-full bg-white/10 border border-white/10"
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              >
+                <div data-course-quiz-review-level-progress-fill class="h-full w-0 rounded-full bg-gradient-to-r from-primary-500 via-accent-500 to-primary-400 transition-all duration-700 motion-reduce:transition-none"></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-4 flex items-center gap-5" data-course-quiz-review-status-chip>
+            <div class="relative shrink-0" style="width:120px;height:120px" data-course-quiz-review-score-ring>
+              <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#1e1a2e" stroke-width="10"/>
+                <circle data-ring-seg-goal cx="60" cy="60" r="50" fill="none" stroke="rgba(167,139,250,0.28)" stroke-width="10" stroke-linecap="round" class="transition-all duration-150"/>
+                <circle data-ring-seg-remaining cx="60" cy="60" r="50" fill="none" stroke="#2a2740" stroke-width="10" stroke-linecap="round" class="transition-all duration-150"/>
+                <circle data-ring-seg-score cx="60" cy="60" r="50" fill="none" stroke="#f87171" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 314.16" class="transition-all duration-150"/>
+                <circle data-ring-hit-score cx="60" cy="60" r="50" fill="none" stroke="transparent" stroke-width="22" style="cursor:pointer;pointer-events:stroke"/>
+                <circle data-ring-hit-goal cx="60" cy="60" r="50" fill="none" stroke="transparent" stroke-width="22" style="cursor:pointer;pointer-events:stroke"/>
+                <circle data-ring-hit-remaining cx="60" cy="60" r="50" fill="none" stroke="transparent" stroke-width="22" style="cursor:pointer;pointer-events:stroke"/>
+              </svg>
+              <div data-ring-zero-dot class="absolute hidden" style="top:5px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#f87171"></div>
+              <div data-ring-center class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center transition-opacity duration-150">
+                <p data-ring-center-value class="font-mono text-[26px] leading-none" style="color:#f87171">--%</p>
+                <p data-ring-center-label class="mt-1 text-[10px] uppercase tracking-wider text-gray-500" data-i18n-ring-accuracy>Genauigkeit</p>
+              </div>
+            </div>
+            <div data-ring-tooltip class="score-ring-tooltip" role="tooltip"></div>
+            <div class="min-w-0 flex-1 space-y-2">
+              <p class="text-xs uppercase tracking-wide text-gray-400">
+                <span data-course-quiz-review-status-label>Status</span>
+              </p>
+              <p data-course-quiz-review-status-value class="font-semibold text-lg text-gray-300">--</p>
+              <p class="text-sm text-gray-300">
+                <span data-course-quiz-review-ratio-label>Genauigkeit</span>
+                <span aria-hidden="true">:</span>
+                <strong data-course-quiz-review-ratio-value class="ml-1 text-primary-300">--%</strong>
+              </p>
+              <p data-course-quiz-review-grade class="text-sm text-gray-300">Bewertung: --</p>
+              <p data-course-quiz-review-best-score class="text-sm text-gray-300">Bester Lauf: --%</p>
+              <p data-course-quiz-review-replay-hint class="text-sm text-primary-200">Nächste Challenge freigeschaltet.</p>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h3 data-course-quiz-review-overview-title class="text-base font-semibold text-white">Dein Ergebnis im &Uuml;berblick</h3>
+          </div>
+          <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 text-sm" aria-live="polite">
+            <li class="shared-fancy-metric-card rounded-2xl p-4" data-course-quiz-review-summary-item>
+              <p data-course-quiz-review-time-label class="text-xs uppercase tracking-wide text-gray-400">Zeit</p>
+              <p data-course-quiz-review-time-value class="mt-2 font-pixel text-lg text-primary-300">--:--</p>
+              <p data-course-quiz-review-time-subtitle class="mt-1 text-xs text-gray-500">Minuten</p>
+            </li>
+            <li class="shared-fancy-metric-card rounded-2xl p-4" data-course-quiz-review-summary-item>
+              <p data-course-quiz-review-score-label class="text-xs uppercase tracking-wide text-gray-400">Richtig</p>
+              <p data-course-quiz-review-score-value class="mt-2 font-pixel text-lg text-green-400">--</p>
+              <p data-course-quiz-review-score-subtitle class="mt-1 text-xs text-gray-500">von -- Fragen</p>
+            </li>
+            <li class="shared-fancy-metric-card rounded-2xl p-4" data-course-quiz-review-summary-item>
+              <p data-course-quiz-review-wrong-label class="text-xs uppercase tracking-wide text-gray-400">Falsch</p>
+              <p data-course-quiz-review-wrong-value class="mt-2 font-pixel text-lg text-red-400">--</p>
+              <p data-course-quiz-review-wrong-subtitle class="mt-1 text-xs text-gray-500">Fragen</p>
+            </li>
+            <li class="shared-fancy-metric-card rounded-2xl p-4" data-course-quiz-review-summary-item>
+              <p data-course-quiz-review-xp-gain-label class="text-xs uppercase tracking-wide text-gray-400">Verdient</p>
+              <p data-course-quiz-review-xp-gain-value class="mt-2 font-pixel text-lg text-yellow-400">+0</p>
+              <p data-course-quiz-review-xp-gain-subtitle class="mt-1 text-xs text-gray-500">XP</p>
+            </li>
+          </ul>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <a
+              data-course-quiz-review-retry-link-top
+              href="courses/quiz/play/"
+              class="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-5 py-3 text-sm font-semibold text-white transition-colors motion-reduce:transition-none hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+            >Quiz wiederholen</a>
+            <a
+              data-course-quiz-review-back-link-top
+              href="courses/"
+              class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors motion-reduce:transition-none hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+            >Zur Kursübersicht</a>
+          </div>
+
+          <section class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3" data-course-quiz-review-xp-breakdown>
+            <h3 data-course-quiz-review-xp-breakdown-title class="text-sm font-semibold text-white">Dein XP-Breakdown</h3>
+            <ul data-course-quiz-review-xp-breakdown-list class="space-y-2 text-sm text-gray-300">
+              <li class="text-gray-400">Wird geladen...</li>
+            </ul>
+          </section>
+
+          <section class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3" data-course-quiz-review-answer-breakdown>
+            <h3 data-course-quiz-review-answer-breakdown-title class="text-sm font-semibold text-white">Auswertung</h3>
+            <ul data-course-quiz-review-answer-breakdown-list class="space-y-2 text-sm text-gray-300">
+              <li class="text-gray-400">Wird geladen...</li>
+            </ul>
+          </section>
+
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <a
+              data-course-quiz-review-retry-link
+              href="courses/quiz/play/"
+              class="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-5 py-3 text-sm font-semibold text-white transition-colors motion-reduce:transition-none hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+            >Quiz wiederholen</a>
+            <a
+              data-course-quiz-review-back-link
+              href="courses/"
+              class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors motion-reduce:transition-none hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
+            >Zur Kursübersicht</a>
+          </div>
+          <noscript>
+            <p class="text-sm text-gray-300">Bitte JavaScript aktivieren, um die Auswertung anzuzeigen.</p>
+          </noscript>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-cyber-darker border-t border-white/10 py-16 space-section-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center"><span class="font-pixel text-xs text-white">SQ</span></div>
+          <span class="font-pixel text-sm text-white">SnappinQuiz</span>
+        </a>
+        <p class="text-sm text-gray-400 mb-4">Gamifiziertes Cybersecurity Awareness Training für Einzelpersonen und Unternehmen.</p>
+        <p class="inline-flex items-center gap-1 py-3 text-sm text-gray-400">
+          <span>Ihr Partner:</span>
+          <a href="https://toowoxx.de/" class="inline-flex items-center hover:text-white transition-colors rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" target="_blank" rel="noopener noreferrer" aria-label="Toowoxx (opens in a new tab)">toowoxx.de</a>
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Produkt</h4>
+        <ul class="space-y-2">
+          <li><a href="courses/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kurse</a></li>
+          <li><a href="app/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">SnappinQuiz App</a></li>
+          <li><a href="pricing/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Preise</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Unternehmen</h4>
+        <ul class="space-y-2">
+          <li><a href="about-us/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Über uns</a></li>
+          <li><a href="blog/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Blog</a></li>
+          <li><a href="business/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Rechtliches</h4>
+        <ul class="space-y-2">
+          <li><a href="datenschutzerklarung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Datenschutz</a></li>
+          <li><a href="impressum/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Impressum</a></li>
+          <li><a href="widerrufsbelehrung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Widerrufsbelehrung</a></li>
+          <li><a href="agb/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">AGB</a></li>
+          <li><a href="faq/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">&copy; 2026 SnappinQuiz. Alle Rechte vorbehalten.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+  <script src="src/js/main.js"></script>
+  <script src="src/js/course-chapters.js"></script>
+</body>
+</html>
+

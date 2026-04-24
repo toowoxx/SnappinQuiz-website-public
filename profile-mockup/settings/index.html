@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../../">
+  <meta name="description" content="SnappinQuiz Einstellungen Mockup mit Profil, Sicherheit und Benachrichtigungen.">
+  <title>SnappinQuiz - Einstellungen</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <script src="src/js/tailwind-font-size-tokens.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87'},
+            accent: {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899'},
+            cyber: {dark:'#0a0a0f',darker:'#050508',purple:'#aa96d2',pink:'#fcd3eb',green:'#00ff88',blue:'#00d4ff'}
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif']
+          },
+          fontSize: window.SNAPPINQUIZ_FONT_SIZE_TOKENS,
+        }
+      }
+    }
+  </script>
+  <script>
+    (function guardSettingsScreen() {
+      document.documentElement.setAttribute("data-settings-guard", "pending");
+      const safeGet = (key) => {
+        try {
+          return window.localStorage.getItem(key);
+        } catch (_) {
+          return null;
+        }
+      };
+      const hasSession = safeGet("snappinquiz-mock-session") === "1";
+      if (!hasSession) {
+        window.location.replace("../login/");
+        return;
+      }
+      document.documentElement.removeAttribute("data-settings-guard");
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #050508;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+    }
+    .light, [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light .bg-cyber-dark, [data-theme="light"] .bg-cyber-dark { background-color: #ffffff; }
+    .light .bg-cyber-darker, [data-theme="light"] .bg-cyber-darker { background-color: #f9fafb; }
+    .light .bg-white\/5, [data-theme="light"] .bg-white\/5 { background-color: rgba(0,0,0,0.03); }
+    .light .border-white\/10, [data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.1); }
+    .light .text-white, [data-theme="light"] .text-white { color: var(--text-primary); }
+    .light .text-gray-300, [data-theme="light"] .text-gray-300 { color: var(--text-secondary); }
+    .light .text-gray-400, [data-theme="light"] .text-gray-400 { color: var(--text-secondary); }
+    .light .nav-blur, [data-theme="light"] .nav-blur { background-color: rgba(255,255,255,0.9); }
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .scanline {
+      background: linear-gradient(transparent 0%, rgba(168,85,247,0.03) 50%, transparent 100%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .nav-link-fixed {
+      display: inline-flex;
+      justify-content: center;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .settings-main-offset {
+      padding-top: calc(7rem + env(safe-area-inset-top));
+    }
+    html[data-settings-guard="pending"] body {
+      visibility: hidden;
+    }
+    .settings-shell {
+      display: grid;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+    .settings-sidebar {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.5rem;
+    }
+    .settings-tab-button {
+      width: 100%;
+      min-height: 44px;
+      text-align: left;
+      border-radius: 0.75rem;
+      border: 1px solid transparent;
+      color: #d1d5db;
+      background: transparent;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .settings-tab-button {
+        transition: none;
+      }
+    }
+    .settings-tab-button:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .settings-tab-button[aria-selected="true"] {
+      color: #ffffff;
+      border-color: rgba(168, 85, 247, 0.45);
+      background: rgba(168, 85, 247, 0.18);
+    }
+    .profile-avatar-option-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .profile-avatar-option {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.06);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .profile-avatar-option:hover {
+        border-color: rgba(168, 85, 247, 0.5);
+        background: rgba(168, 85, 247, 0.16);
+        transform: translateY(-1px);
+      }
+    }
+    .profile-avatar-option[aria-pressed="true"] {
+      border-color: rgba(168, 85, 247, 0.78);
+      background: rgba(168, 85, 247, 0.28);
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.25);
+    }
+    .profile-avatar-option-preview {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 0.5rem;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      image-rendering: pixelated;
+    }
+    .settings-panel {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
+    }
+    .settings-panel > h2,
+    .settings-panel > h3 {
+      margin: 0;
+      line-height: 1.35;
+    }
+    .settings-content {
+      min-height: 22rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .settings-content > .settings-panel {
+      order: 1;
+      flex: 1 1 auto;
+    }
+    .settings-content > [data-settings-status] {
+      order: 2;
+      margin-top: auto !important;
+    }
+    .light .settings-sidebar, [data-theme="light"] .settings-sidebar {
+      border-color: rgba(126, 34, 206, 0.2);
+      background: rgba(255, 255, 255, 0.96);
+    }
+    .light .settings-tab-button, [data-theme="light"] .settings-tab-button {
+      color: #4b5563;
+    }
+    .light .settings-tab-button:hover, [data-theme="light"] .settings-tab-button:hover {
+      color: #1f2937;
+      background: rgba(126, 34, 206, 0.08);
+    }
+    .light .settings-tab-button[aria-selected="true"], [data-theme="light"] .settings-tab-button[aria-selected="true"] {
+      color: #581c87;
+      border-color: rgba(126, 34, 206, 0.45);
+      background: rgba(168, 85, 247, 0.2);
+    }
+    .light .profile-avatar-option, [data-theme="light"] .profile-avatar-option {
+      border-color: rgba(126, 34, 206, 0.25);
+      background: rgba(126, 34, 206, 0.08);
+      color: #374151;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .light .profile-avatar-option:hover, [data-theme="light"] .profile-avatar-option:hover {
+        border-color: rgba(126, 34, 206, 0.5);
+        background: rgba(168, 85, 247, 0.16);
+      }
+    }
+    .light .profile-avatar-option[aria-pressed="true"], [data-theme="light"] .profile-avatar-option[aria-pressed="true"] {
+      border-color: rgba(126, 34, 206, 0.7);
+      background: rgba(168, 85, 247, 0.22);
+      color: #4c1d95;
+    }
+    @media (min-width: 1280px) {
+      .settings-shell {
+        grid-template-columns: 16rem minmax(0, 1fr);
+        align-items: stretch;
+        min-height: 28rem;
+      }
+      .settings-sidebar {
+        position: sticky;
+        top: calc(6.5rem + env(safe-area-inset-top));
+        min-height: 28rem;
+      }
+      .settings-content {
+        min-height: 28rem;
+      }
+      .settings-panel {
+        min-height: 28rem;
+      }
+    }
+    @media (max-width: 639px) {
+      .settings-tab-button {
+        font-size: 0.8125rem;
+        line-height: 1.2;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="src/css/spacing.css">
+  <link rel="stylesheet" href="src/css/auth-mockup.css">
+</head>
+
+<body class="bg-cyber-dark text-white font-sans antialiased overflow-x-hidden">
+  <div class="fixed inset-0 scanline z-50 pointer-events-none"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-40 nav-blur bg-cyber-dark/80 border-b border-primary-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <span class="font-pixel text-xs text-white">SQ</span>
+          </div>
+          <span class="font-pixel text-xs sm:text-sm text-white group-hover:text-primary-400 transition-colors">SnappinQuiz</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="courses/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.courses">Kurse</a>
+          <a href="business/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.business">Business</a>
+          <a href="app/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.app">SnappinQuiz App</a>
+          <a href="blog/" class="nav-link-fixed text-gray-300 hover:text-primary-400 transition-colors text-sm font-medium" data-i18n="nav.blog">Blog</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+  <div class="relative" data-settings-dropdown-menu>
+    <button type="button" data-settings-dropdown-trigger aria-labelledby="settings-trigger-label" aria-expanded="false" class="btn-neutral inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.88 2h-3.76a.5.5 0 00-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.73 8.48a.5.5 0 00.12.64l2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.69.22l2.39-.96c.5.4 1.05.72 1.63.95l.36 2.53c.03.25.24.43.49.43h3.76c.25 0 .46-.18.49-.43l.36-2.53c.58-.23 1.13-.55 1.63-.95l2.39.96c.26.12.55.02.69-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"></path>
+      </svg>
+      <span id="settings-trigger-label" class="sr-only" data-i18n="profil-einstellungen">Profil-Einstellungen</span>
+    </button>
+    <div data-settings-dropdown class="hidden absolute right-0 z-50 mt-2 w-[calc(100vw-1rem)] sm:w-80 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/settings/" data-auth-settings class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="alle einstellungen">Alle Einstellungen</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" data-theme-toggle aria-pressed="false" class="flex w-full items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="nav.theme">Theme</span>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+          <span data-theme-current-label aria-live="polite">Dunkelmodus</span>
+          <span data-theme-switch-track class="relative inline-flex h-6 w-12 items-center rounded-full border border-white/20 bg-white/10 p-0.5 transition-colors duration-200" aria-hidden="true">
+            <svg data-theme-switch-icon="light" class="absolute left-1 h-3 w-3 text-yellow-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M7 0h2v2H7zM7 14h2v2H7zM0 7h2v2H0zM14 7h2v2h-2zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2zM6 5h4v1h1v4h-1v1H6v-1H5V6h1z"/>
+            </svg>
+            <svg data-theme-switch-icon="dark" class="absolute right-1 h-3 w-3 text-primary-300" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M10.6 1.4A6.4 6.4 0 1014.6 13a5.4 5.4 0 11-4-11.6z"/>
+            </svg>
+            <span data-theme-switch-thumb class="inline-block h-5 w-5 rounded-full bg-white/90 shadow transition-transform duration-200"></span>
+          </span>
+        </span>
+      </button>
+      <details data-settings-menu="language" class="rounded-lg">
+        <summary data-lang-toggle data-settings-trigger class="flex w-full cursor-pointer list-none items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+          <span data-i18n="nav.language">Language</span>
+          <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-gray-300">
+            <span data-lang-indicator>Deutsch</span>
+            <svg data-setting-chevron class="h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        </summary>
+        <div class="mt-2 grid gap-2 pl-2" data-language-options>
+          <button type="button" data-lang-option="de" data-option-key="deutsch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>Deutsch</span>
+          </button>
+          <button type="button" data-lang-option="en" data-option-key="englisch" aria-pressed="false" class="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-gray-200 transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+            <span data-option-label>English</span>
+          </button>
+        </div>
+      </details>
+    </div>
+  </div>
+  <a href="profile-mockup/login/" data-auth-login class="btn-neutral inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-primary-300 active:bg-white/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400" data-i18n="nav.login">Login</a>
+  <a href="profile-mockup/signup/" data-auth-signup class="inline-flex min-h-[44px] items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 active:opacity-80 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300" data-i18n="nav.signup">Sign up</a>
+  <div class="relative hidden" data-profile-menu data-auth-profile-menu>
+    <button type="button" data-profile-trigger aria-expanded="false" class="inline-flex min-h-[44px] items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-gray-200">
+      <span data-profile-trigger-avatar role="img" aria-label="Profilbild" class="inline-flex h-4 w-4 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/10 bg-cover bg-center text-[0.55rem] font-semibold leading-none text-gray-100">
+        <span data-profile-trigger-avatar-initials aria-hidden="true">DU</span>
+      </span>
+      <span data-i18n="nav.profile">Profil</span>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </button>
+    <div data-profile-dropdown class="hidden absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-primary-500/20 bg-cyber-dark/95 backdrop-blur-md p-2 shadow-2xl space-component-panel space-component-stack">
+      <a href="profile-mockup/profile/" data-auth-profile class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 hover:text-primary-300 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="mein profil">Mein Profil</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/organisation/" data-auth-owner class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="organisation-dashboard">Organisation-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/admin/" data-auth-admin class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="admin-dashboard">Admin-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="profile-mockup/teamleader/" data-auth-teamleader class="hidden flex items-center justify-between rounded-lg hover:bg-white/10 transition-colors text-sm text-gray-200 space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+        <span data-i18n="teamleader-dashboard">Teamleader-Dashboard</span>
+        <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="h-px bg-white/10" aria-hidden="true"></div>
+      <button type="button" data-auth-logout class="hidden block w-full min-h-[44px] rounded-lg text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors space-component-item focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300" data-i18n="nav.logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-300 hover:text-white" aria-label="Mobiles Menü öffnen" aria-controls="mobile-menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-primary-500/20" style="background-color: var(--bg-secondary);">
+      <div class="px-4 py-4 space-y-3">
+        <a href="courses/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.courses">Kurse</a>
+        <a href="business/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.business">Business</a>
+        <a href="app/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.app">SnappinQuiz App</a>
+        <a href="blog/" class="block text-gray-300 hover:text-primary-400 py-2" data-i18n="nav.blog">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative min-h-screen min-h-[100dvh] settings-main-offset pb-20">
+    <div class="absolute inset-0 bg-grid opacity-40"></div>
+    <div class="absolute top-20 -left-32 w-96 h-96 bg-primary-500/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-12 -right-24 w-80 h-80 bg-accent-500/15 rounded-full blur-3xl"></div>
+
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8" data-auth-mockup data-auth-screen="settings">
+      <header class="text-center space-y-4">
+  <p class="font-pixel text-sm text-primary-400 block" data-profile-i18n="settings.kicker">EINSTELLUNGEN</p>
+  <h1 class="text-4xl sm:text-5xl font-bold text-white" data-profile-i18n="settings.title">Alle Einstellungen</h1>
+  <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-profile-i18n="settings.subtitle">Verwalte Profil, Sicherheit und Benachrichtigungen an einem Ort.</p>
+</header>
+
+
+      <div class="auth-mockup-panel rounded-2xl space-component-panel">
+        <div class="settings-shell settings-shell-full-height">
+          <aside class="settings-sidebar">
+            <div data-settings-tab-list role="tablist" aria-label="Settings sections" aria-orientation="vertical" class="settings-nav-sections">
+              <button type="button" id="settings-tab-profile" data-settings-tab-target="profile" role="tab" aria-controls="settings-panel-profile" aria-selected="true" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span data-profile-i18n="settings.nav.profile">Profil</span></button>
+              <button type="button" id="settings-tab-notifications" data-settings-tab-target="notifications" role="tab" aria-controls="settings-panel-notifications" aria-selected="false" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span data-profile-i18n="settings.nav.notifications">Benachrichtigungen</span></button>
+              <button type="button" id="settings-tab-privacy" data-settings-tab-target="privacy" role="tab" aria-controls="settings-panel-privacy" aria-selected="false" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span data-profile-i18n="settings.nav.privacy">Datenschutz</span></button>
+              <button type="button" id="settings-tab-account" data-settings-tab-target="account" role="tab" aria-controls="settings-panel-account" aria-selected="false" class="settings-tab-button text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"><span data-profile-i18n="settings.nav.account">Account</span></button>
+            </div>
+          </aside>
+
+          <section class="settings-content">
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <span data-auth-state-badge class="w-full text-xs font-semibold uppercase tracking-wide text-gray-300 sm:w-auto sm:text-right">Nicht angemeldet</span>
+            </div>
+            <article id="settings-panel-profile" data-settings-tab-panel="profile" role="tabpanel" aria-labelledby="settings-tab-profile" class="settings-panel space-y-4">
+              <h2 class="text-xl font-semibold text-white" data-profile-i18n="profile.manage">Profil verwalten (Mockup)</h2>
+              <form data-profile-form class="grid gap-4">
+                <div class="flex items-center gap-4">
+                  <div data-profile-avatar-preview role="img" aria-label="Profilbild Vorschau Demo User" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-500/30 text-lg font-semibold text-white">DU</div>
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-300" data-profile-i18n="profile.avatarSelection">Avatar</p>
+                    <div data-profile-avatar-presets class="profile-avatar-option-list mt-2" role="group"></div>
+                    <input type="hidden" data-profile-avatar-preset value="">
+                  </div>
+                </div>
+
+                <label class="text-sm text-gray-300" for="profile-name" data-profile-i18n="profile.name">Name</label>
+                <input id="profile-name" data-profile-name class="auth-mockup-input rounded-xl px-4 py-3" type="text" autocomplete="name" required>
+
+                <label class="text-sm text-gray-300" for="profile-email" data-profile-i18n="profile.email">E-Mail</label>
+                <input id="profile-email" data-profile-email class="auth-mockup-input rounded-xl px-4 py-3" type="email" autocomplete="email" required>
+
+                <label class="text-sm text-gray-300" for="profile-password" data-profile-i18n="profile.password">Neues Passwort (optional)</label>
+                <input id="profile-password" data-profile-password class="auth-mockup-input rounded-xl px-4 py-3" type="password" autocomplete="new-password" placeholder="Mindestens 8 Zeichen" minlength="8" data-profile-i18n-placeholder="profile.passwordPlaceholder">
+
+                <label class="text-sm text-gray-300" for="profile-password-confirm" data-profile-i18n="profile.passwordConfirm">Neues Passwort bestätigen</label>
+                <input id="profile-password-confirm" data-profile-password-confirm class="auth-mockup-input rounded-xl px-4 py-3" type="password" autocomplete="new-password" placeholder="Passwort wiederholen" minlength="8" data-profile-i18n-placeholder="profile.passwordConfirmPlaceholder">
+
+                <button type="submit" class="auth-mockup-btn-admin-primary" data-profile-i18n="profile.save">Profil speichern</button>
+                <p data-profile-status class="auth-mockup-status text-sm min-h-6" role="status" aria-live="polite"></p>
+              </form>
+            </article>
+
+            <article id="settings-panel-notifications" data-settings-tab-panel="notifications" role="tabpanel" aria-labelledby="settings-tab-notifications" class="settings-panel space-y-3 hidden">
+              <h3 class="text-xl font-semibold text-white" data-profile-i18n="settings.notifications.title">Benachrichtigungen</h3>
+              <label class="flex items-center justify-between gap-4 text-sm text-gray-300">
+                <span data-profile-i18n="settings.notifications.course">Kurs-Erinnerungen</span>
+                <input type="checkbox" data-settings-action="notifications-course" checked class="h-5 w-5 shrink-0 rounded border border-white/20 bg-white/5 accent-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+              </label>
+              <label class="flex items-center justify-between gap-4 text-sm text-gray-300">
+                <span data-profile-i18n="settings.notifications.blog">Blog-Updates</span>
+                <input type="checkbox" data-settings-action="notifications-blog" checked class="h-5 w-5 shrink-0 rounded border border-white/20 bg-white/5 accent-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+              </label>
+              <label class="flex items-center justify-between gap-4 text-sm text-gray-300">
+                <span data-profile-i18n="settings.notifications.security">Sicherheitswarnungen</span>
+                <input type="checkbox" data-settings-action="notifications-security" checked class="h-5 w-5 shrink-0 rounded border border-white/20 bg-white/5 accent-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+              </label>
+            </article>
+
+            <article id="settings-panel-privacy" data-settings-tab-panel="privacy" role="tabpanel" aria-labelledby="settings-tab-privacy" class="settings-panel space-y-3 hidden">
+              <h3 class="text-xl font-semibold text-white" data-profile-i18n="settings.privacy.title">Datenschutz</h3>
+              <label class="flex items-center justify-between gap-4 text-sm text-gray-300">
+                <span data-profile-i18n="settings.privacy.public">Öffentliche Sichtbarkeit des Profils</span>
+                <input type="checkbox" data-settings-action="privacy-public" class="h-5 w-5 shrink-0 rounded border border-white/20 bg-white/5 accent-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+              </label>
+              <label class="flex items-center justify-between gap-4 text-sm text-gray-300">
+                <span data-profile-i18n="settings.privacy.analytics">Lernanalysen erlauben</span>
+                <input type="checkbox" data-settings-action="privacy-analytics" checked class="h-5 w-5 shrink-0 rounded border border-white/20 bg-white/5 accent-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400">
+              </label>
+              <button type="button" data-settings-action="privacy-export" class="auth-mockup-btn-admin-primary w-full" data-profile-i18n="settings.privacy.export">Meine Daten exportieren</button>
+            </article>
+
+            <article id="settings-panel-account" data-settings-tab-panel="account" role="tabpanel" aria-labelledby="settings-tab-account" class="settings-panel space-y-3 hidden">
+              <h3 class="text-xl font-semibold text-white" data-profile-i18n="settings.account.title">Account</h3>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <button type="button" data-settings-action="account-sessions" class="auth-mockup-btn-admin-primary" data-profile-i18n="settings.account.sessions">Sitzungen verwalten</button>
+                <button type="button" data-settings-action="account-delete" class="auth-mockup-btn-admin-danger" data-profile-i18n="settings.account.delete">Account löschen</button>
+              </div>
+            </article>
+
+            <p data-settings-status class="auth-mockup-status text-sm min-h-6" role="status" aria-live="polite"></p>
+
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-cyber-darker border-t border-white/10 py-16 space-section-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center"><span class="font-pixel text-xs text-white">SQ</span></div>
+          <span class="font-pixel text-sm text-white">SnappinQuiz</span>
+        </a>
+        <p class="text-sm text-gray-400 mb-4">Gamifiziertes Cybersecurity Awareness Training für Einzelpersonen und Unternehmen.</p>
+        <p class="inline-flex items-center gap-1 py-3 text-sm text-gray-400">
+          <span>Ihr Partner:</span>
+          <a href="https://toowoxx.de/" class="inline-flex items-center hover:text-white transition-colors rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" target="_blank" rel="noopener noreferrer" aria-label="Toowoxx (opens in a new tab)">toowoxx.de</a>
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Produkt</h4>
+        <ul class="space-y-2">
+          <li><a href="courses/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kurse</a></li>
+          <li><a href="app/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">SnappinQuiz App</a></li>
+          <li><a href="pricing/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Preise</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Unternehmen</h4>
+        <ul class="space-y-2">
+          <li><a href="about-us/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Über uns</a></li>
+          <li><a href="blog/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Blog</a></li>
+          <li><a href="business/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Rechtliches</h4>
+        <ul class="space-y-2">
+          <li><a href="datenschutzerklarung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Datenschutz</a></li>
+          <li><a href="impressum/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Impressum</a></li>
+          <li><a href="widerrufsbelehrung/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Widerrufsbelehrung</a></li>
+          <li><a href="agb/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">AGB</a></li>
+          <li><a href="faq/" class="text-sm text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">&copy; 2026 SnappinQuiz. Alle Rechte vorbehalten.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+  <script src="src/js/main.js"></script>
+  <script src="src/js/profile-mockup.js"></script>
+</body>
+</html>

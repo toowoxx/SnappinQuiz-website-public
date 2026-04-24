@@ -1,0 +1,69 @@
+.sq-feature-box {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.05);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sq-feature-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgb(168 85 247 / 0.2);
+  }
+}
+
+.sq-feature-icon-wrap {
+  display: inline-flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sq-feature-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.sq-feature-title {
+  margin: 0 0 0.75rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(0.72rem, 1.15vw, 0.75rem);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  color: #ffffff;
+}
+
+.sq-feature-value {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  color: #d8b4fe;
+}
+
+.sq-feature-description {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #9ca3af;
+}
+
+.light .sq-feature-box,
+[data-theme="light"] .sq-feature-box {
+  border-color: rgb(0 0 0 / 0.12);
+  background: rgb(0 0 0 / 0.03);
+}
+
+.light .sq-feature-title,
+[data-theme="light"] .sq-feature-title {
+  color: #111827;
+}
+
+.light .sq-feature-description,
+[data-theme="light"] .sq-feature-description {
+  color: #4b5563;
+}
